@@ -1,0 +1,48 @@
+//
+// REViewer
+// Copyright 2020 Illumina, Inc.
+//
+// Author: Egor Dolzhenko <edolzhenko@illumina.com>
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+//
+#pragma once
+
+#include <vector>
+
+#include <boost/optional.hpp>
+
+#include "graphcore/Path.hh"
+
+#include "app/FragLenFilter.hh"
+#include "app/GenomicRegion.hh"
+#include "app/Origin.hh"
+#include "app/Projection.hh"
+
+struct FragAssignment
+{
+    FragAssignment(std::vector<std::string> fragIds, std::vector<int> alignIndexByFrag)
+        : fragIds(std::move(fragIds))
+        , alignIndexByFrag(std::move(alignIndexByFrag))
+    {
+    }
+
+    std::vector<std::string> fragIds;
+    std::vector<int> alignIndexByFrag;
+};
+
+FragAssignment
+getBestFragAssignment(const std::vector<graphtools::Path>& hapPaths, const FragPathAlignsById& fragPathAlignsById);
+
+// FragAssignment removeFlankingReads(const FragPathAlignsById& infoByRead, const FragAssignment& fragAssignment);

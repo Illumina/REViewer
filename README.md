@@ -2,7 +2,8 @@
 
 REViewer is a tool for visualizing alignments of reads in regions containing
 tandem repeats. REViewer requires a BAMlet with graph-realigned reads generated
-by ExpansionHunter and the corresponding variant catalog.
+by [ExpansionHunter](https://github.com/Illumina/ExpansionHunter) and the
+corresponding variant catalog.
 
 ## License
 REViewer is provided under the terms and conditions of the [GPLv3 license](LICENSE.txt).

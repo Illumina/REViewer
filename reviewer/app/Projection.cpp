@@ -115,7 +115,7 @@ vector<int> getStartIndexes(const Path& projPath, int initialStartIndex, const G
 
     auto repeatStartIndexIt = std::find(projPath.begin(), projPath.end(), repeatNode);
     assert(repeatStartIndexIt != projPath.end());
-    int repeatStartIndex = *repeatStartIndexIt;
+    int repeatStartIndex = repeatStartIndexIt - projPath.begin();
 
     vector<int> startIndexes;
     for (int index = 0; index != numMotifsInPath - numMotifsInAlign + 1; ++index)

@@ -14,7 +14,7 @@ please see [COPYRIGHT.txt](COPYRIGHT.txt) for additional details.
 REViewer can be built from source using the standard CMake commands.
 
 ```shell script
-cd reviewer
+cd REViewer
 mkdir build; cd build
 cmake ..; make
 ```

@@ -23,6 +23,7 @@
 #include <cassert>
 #include <fstream>
 #include <map>
+#include <stdexcept>
 #include <utility>
 
 #include <boost/algorithm/string.hpp>
@@ -34,6 +35,7 @@ using graphtools::NodeId;
 using graphtools::Path;
 using std::map;
 using std::pair;
+using std::runtime_error;
 using std::stoi;
 using std::string;
 using std::vector;
@@ -54,6 +56,11 @@ static vector<int> extractRepeatLengths(const string& vcfPath, const string& rep
                 const string sampleFields = pieces[pieces.size() - 1];
                 boost::split(pieces, sampleFields, boost::is_any_of(":"));
                 const string genotypeEncoding = pieces[2];
+
+                if (genotypeEncoding == "./.")
+                {
+                    throw runtime_error("Cannot create a plot because the genotype of " + repeatId + " is missing");
+                }
 
                 boost::split(pieces, genotypeEncoding, boost::is_any_of("/"));
                 vector<int> sizes;

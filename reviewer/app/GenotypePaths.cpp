@@ -129,7 +129,7 @@ getVariantPathPieces(int meanFragLen, const string& vcfPath, const LocusSpecific
             }
         }
 
-        assert(variantPaths.size() == 2);
+        assert(variantPaths.size() <= 2);
         nodesByHaplotypeByVariant.emplace(std::make_pair(nodeRangeFrom, nodeRangeTo), variantPaths);
     }
 
@@ -145,7 +145,7 @@ getVariantGenotypeNodes(const map<NodeRange, GenotypeNodes>& nodeRangeToPaths, N
         const auto& paths = nodeRangeAndPaths.second;
         if (nodeRange.first <= node && node <= nodeRange.second)
         {
-            assert(paths.size() == 2);
+            assert(paths.size() <= 2);
             return std::make_pair(paths, nodeRange.second);
         }
     }

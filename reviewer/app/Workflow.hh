@@ -24,7 +24,7 @@
 
 struct WorkflowArguments
 {
-    std::string htsFilePath;
+    std::string readsPath;
     std::string vcfPath;
     std::string catalogPath;
     std::string referencePath;

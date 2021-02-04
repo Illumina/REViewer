@@ -20,6 +20,8 @@
 
 #include "Workflow.hh"
 
+#include <boost/algorithm/string.hpp>
+
 #include "spdlog/spdlog.h"
 
 #include "app/Aligns.hh"
@@ -40,16 +42,14 @@ using std::string;
 using std::unordered_map;
 using std::vector;
 
-int runWorkflow(const WorkflowArguments& args)
+void visualizeLocus(
+    const string& referencePath, const string& readsPath, const string& vcfPath, const string& locusId,
+    const LocusSpecification& locusSpec, const string& outputPath)
 {
-    const int kFlankLength = 1000;
-    Reference reference(args.referencePath);
-    spdlog::info("Loading specification of locus {}", args.locusId);
-    auto locusCatalog = loadLocusCatalogFromDisk(args.catalogPath, reference, kFlankLength);
-    auto locusSpec = locusCatalog.at(args.locusId);
+    spdlog::info("Loading specification of locus {}", locusId);
 
     ReadPairById fragById;
-    auto fragGraphAlignById = getAligns(args.htsFilePath, args.referencePath, locusSpec, fragById);
+    auto fragGraphAlignById = getAligns(readsPath, referencePath, locusSpec, fragById);
     spdlog::info("Extracted {} frags", fragGraphAlignById.size());
 
     spdlog::info("Calculating fragment length");
@@ -57,7 +57,7 @@ int runWorkflow(const WorkflowArguments& args)
     spdlog::info("Fragment length is estimated to be {}", meanFragLen);
 
     spdlog::info("Extracting genotype paths");
-    auto pathsByGenotype = getCandidateGenotypePaths(meanFragLen, args.vcfPath, locusSpec);
+    auto pathsByGenotype = getCandidateGenotypePaths(meanFragLen, vcfPath, locusSpec);
 
     spdlog::info("Phasing");
     auto genotypePaths = phase(fragGraphAlignById, pathsByGenotype);
@@ -79,7 +79,43 @@ int runWorkflow(const WorkflowArguments& args)
     auto lanePlots = generateBlueprint(genotypePaths, fragById, fragAssignment, fragPathAlignsById);
 
     spdlog::info("Writing SVG image to disk");
-    generateSvg(lanePlots, args.outputPrefix + ".svg");
+    generateSvg(lanePlots, outputPath);
+}
+
+vector<string> getLocusIds(const RegionCatalog& catalog, const string& encoding)
+{
+    vector<string> locusIds;
+    boost::split(locusIds, encoding, boost::is_any_of(","));
+
+    for (const auto& locusId : locusIds)
+    {
+        if (locusId.empty())
+        {
+            throw std::runtime_error("Empty locus ids are not allowed");
+        }
+
+        if (catalog.find(locusId) == catalog.end())
+        {
+            throw std::runtime_error(locusId + " is missing from the variant catalog");
+        }
+    }
+
+    return locusIds;
+}
+
+int runWorkflow(const WorkflowArguments& args)
+{
+    const int kFlankLength = 1000;
+    Reference reference(args.referencePath);
+    auto locusCatalog = loadLocusCatalogFromDisk(args.catalogPath, reference, kFlankLength);
+
+    auto locusIds = getLocusIds(locusCatalog, args.locusId);
+    for (const auto& locusId : locusIds)
+    {
+        const string outputPath = args.outputPrefix + "." + locusId + ".svg";
+        auto locusSpec = locusCatalog.at(locusId);
+        visualizeLocus(args.referencePath, args.readsPath, args.vcfPath, locusId, locusSpec, outputPath);
+    }
 
     return 0;
 }

@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.7)
-project(REViewer VERSION 0.2.1 LANGUAGES C CXX)
+project(REViewer VERSION 0.2.2 LANGUAGES C CXX)
 
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)

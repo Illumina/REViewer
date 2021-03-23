@@ -26,6 +26,8 @@
 
 #include "spdlog/spdlog.h"
 
+#include "graphalign/GraphAlignmentOperations.hh"
+
 extern "C"
 {
 #include "htslib/faidx.h"
@@ -144,7 +146,10 @@ PairGraphAlignById getAligns(
         }
 
         GraphAlignment align = decodeGraphAlignment(pos, cigar, &locusSpec.regionGraph());
-        assert(graphtools::checkConsistency(align, bases));
+        if (!graphtools::checkConsistency(align, bases))
+        {
+            spdlog::warn("Encountered inconsistent alignment \n{}", prettyPrint(align, bases));
+        }
 
         // Store read and alignment
         if (alignCache.find(fragmentId) == alignCache.end())

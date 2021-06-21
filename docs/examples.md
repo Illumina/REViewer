@@ -1,5 +1,7 @@
 # Examples of read pileups
 
+## Overview
+
 Pileups corresponding to correctly genotyped repeats are characterized by a
 relatively even read coverage of both alleles (Figure 1, panels 1-3). At the
 typical whole-genome sequencing depths (30-60x), each position of a haplotype
@@ -35,4 +37,8 @@ that size of the repeat is overestimated; (6) the short allele is supported by
 just one spanning read suggesting that this allele is not real and that both
 alleles are expanded.
 
+## Read examples
 
+Here are some real examples corresponding to panels [1](example-1-1.svg),
+[2](example-1-2.svg), [3](example-1-3.svg), [4](example-1-4.svg), [5](),
+[6](example-1-6.svg).

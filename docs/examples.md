@@ -24,7 +24,7 @@ read may be a result of an incorrect alignment and (b) the correct genotype is
 likely to be a double expansion. Supplementary Figures S1-6 are the real
 examples of situations depicted on panels 1-6 of Figure 1 respectively.
 
-![Examples of read pileups](docs/images/cartoon-examples.png)
+![Examples of read pileups](images/cartoon-examples.png)
 **Figure 1: Examples of read pileups.** Pileups corresponding to correctly genotyped
 repeats: (1) both repeat alleles are short; (2) one allele is expanded; (3) both
 alleles are expanded. Pileups corresponding to incorrectly genotyped repeats:

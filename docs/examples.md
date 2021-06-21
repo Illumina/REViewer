@@ -40,5 +40,5 @@ alleles are expanded.
 ## Read examples
 
 Here are some real examples corresponding to panels [1](images/example-1-1.pdf),
-[2](images/example-1-2.svg), [3](images/example-1-3.svg),
-[4](images/example-1-4.svg), [5](), [6](images/example-1-6.svg).
+[2](images/example-1-2.pdf), [3](images/example-1-3.pdf),
+[4](images/example-1-4.pdf), 5, [6](images/example-1-6.pdf).

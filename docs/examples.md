@@ -11,20 +11,16 @@ much shorter than the read length this implies the presence of multiple spanning
 reads (Figure 1, both alleles on panel 1 and short allele on panel 2). The
 repeats much larger than the read length are expected to contain multiple
 in-repeat reads (Figure 1, long allele on panel 1 and both alleles on panel 2).
-An expanded allele might not be called correctly if the sequencing depth inside
-the repeat is very low compared to the depth of the region surrounding the
-repeat (Figure 1, long allele on panel 4). Additionally, the presence of
-multiple indels in the alignments of in-repeat reads indicates that the reads
-may not be correctly aligned and that the size of the repeat may be
-overestimated (Figure 1, panel 5). Finally, a short allele supported by one or
-very few spanning reads may not be real. For instance, the short allele depicted
-on panel 6 of Figure 1 is supported by just one spanning and one flanking read,
-which is less than expected based on the coverage of the surrounding region.
-There is also a slight excess of the flanking reads on the long allele of this
-repeat. Taken together, these observations suggest that (a) the single spanning
-read may be a result of an incorrect alignment and (b) the correct genotype is
-likely to be a double expansion. Supplementary Figures S1-6 are the real
-examples of situations depicted on panels 1-6 of Figure 1 respectively.
+Here are real examples corresponding to panels [1](images/example-1-1.pdf),
+[2](images/example-1-2.pdf), and [3](images/example-1-3.pdf).
+
+The table below describes the contents of panels 4-6.
+
+| Panel | Issue                     | Explanation                                                                       | Real examples               |
+|-------|---------------------------|-----------------------------------------------------------------------------------|-----------------------------|
+| 1.4   | False expansion call      | Sequencing depth inside the repeat is very low compared to surrounding reigon     | [4](images/example-1-4.pdf) |
+| 1.5   | False expansion call      | Multiple indels in in-repeat reads suggest incorrect alignments                   |                             |
+| 1.6   | Missed double expansion   | Short allele supported by very few reads; excess of flanking reads on long allele | [6](images/example-1-6.pdf) |
 
 ![Examples of read pileups](images/cartoon-examples.png)
 **Figure 1: Examples of read pileups.** Pileups corresponding to correctly genotyped
@@ -36,9 +32,3 @@ containing multiple indels) suggesting that the reads are incorrectly mapped and
 that size of the repeat is overestimated; (6) the short allele is supported by
 just one spanning read suggesting that this allele is not real and that both
 alleles are expanded.
-
-## Read examples
-
-Here are some real examples corresponding to panels [1](images/example-1-1.pdf),
-[2](images/example-1-2.pdf), [3](images/example-1-3.pdf),
-[4](images/example-1-4.pdf), 5, [6](images/example-1-6.pdf).

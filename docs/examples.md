@@ -16,7 +16,7 @@ Here are real examples corresponding to panels [1](images/example-1-1.pdf),
 
 The table below describes the contents of panels 4-6.
 
-| Panel | Issue                     | Explanation                                                                       | Real examples               |
+| Panel | Issue                     | Explanation                                                                       | Examples                    |
 |-------|---------------------------|-----------------------------------------------------------------------------------|-----------------------------|
 | 1.4   | False expansion call      | Sequencing depth inside the repeat is very low compared to surrounding reigon     | [4](images/example-1-4.pdf) |
 | 1.5   | False expansion call      | Multiple indels in in-repeat reads suggest incorrect alignments                   |                             |

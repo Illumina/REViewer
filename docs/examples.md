@@ -18,9 +18,9 @@ The table below describes the contents of panels 4-6.
 
 | Panel | Issue                     | Explanation                                                                       | Examples                    |
 |:-----:|---------------------------|-----------------------------------------------------------------------------------|-----------------------------|
-| 1.4   | False expansion call      | Sequencing depth inside the repeat is very low compared to surrounding reigon     | [4](images/example-1-4.pdf) |
-| 1.5   | False expansion call      | Multiple indels in in-repeat reads suggest incorrect alignments                   |                             |
-| 1.6   | Missed double expansion   | Short allele supported by very few reads; excess of flanking reads on long allele | [6](images/example-1-6.pdf) |
+| 4     | False expansion call      | Sequencing depth inside the repeat is very low compared to surrounding reigon     | [4](images/example-1-4.pdf) |
+| 5     | False expansion call      | Multiple indels in in-repeat reads suggest incorrect alignments                   |                             |
+| 6     | Missed double expansion   | Short allele supported by very few reads; excess of flanking reads on long allele | [6](images/example-1-6.pdf) |
 
 ![Examples of read pileups](images/cartoon-examples.png)
 **Figure 1: Examples of read pileups.** Pileups corresponding to correctly genotyped

@@ -23,6 +23,11 @@
 #include "app/Aligns.hh"
 #include "app/GenotypePaths.hh"
 
+#include <string>
 #include <vector>
 
-GenotypePaths phase(const PairGraphAlignById& fragGraphAlignById, const std::vector<GenotypePaths>& pathsByGenotype);
+#include <boost/optional.hpp>
+
+GenotypePaths phase(
+    const PairGraphAlignById& fragGraphAlignById, const std::vector<GenotypePaths>& pathsByGenotype,
+    const boost::optional<std::string>& phasingInfoPath);

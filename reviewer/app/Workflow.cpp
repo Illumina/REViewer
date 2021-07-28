@@ -44,7 +44,7 @@ using std::vector;
 
 void visualizeLocus(
     const string& referencePath, const string& readsPath, const string& vcfPath, const string& locusId,
-    const LocusSpecification& locusSpec, const string& outputPath)
+    const LocusSpecification& locusSpec, const string& svgPath, const optional<string>& phasingInfoPath)
 {
     spdlog::info("Loading specification of locus {}", locusId);
 
@@ -60,7 +60,7 @@ void visualizeLocus(
     auto pathsByGenotype = getCandidateGenotypePaths(meanFragLen, vcfPath, locusSpec);
 
     spdlog::info("Phasing");
-    auto genotypePaths = phase(fragGraphAlignById, pathsByGenotype);
+    auto genotypePaths = phase(fragGraphAlignById, pathsByGenotype, phasingInfoPath);
     spdlog::info("Found {} paths defining genotype", genotypePaths.size());
 
     spdlog::info("Projecting reads onto haplotype paths");
@@ -79,7 +79,7 @@ void visualizeLocus(
     auto lanePlots = generateBlueprint(genotypePaths, fragById, fragAssignment, fragPathAlignsById);
 
     spdlog::info("Writing SVG image to disk");
-    generateSvg(lanePlots, outputPath);
+    generateSvg(lanePlots, svgPath);
 }
 
 vector<string> getLocusIds(const RegionCatalog& catalog, const string& encoding)
@@ -112,9 +112,14 @@ int runWorkflow(const WorkflowArguments& args)
     auto locusIds = getLocusIds(locusCatalog, args.locusId);
     for (const auto& locusId : locusIds)
     {
-        const string outputPath = args.outputPrefix + "." + locusId + ".svg";
+        const string svgPath = args.outputPrefix + "." + locusId + ".svg";
+        optional<string> phasingInfoPath;
+        if (args.outputPhasingInfo)
+        {
+            phasingInfoPath = args.outputPrefix + "." + locusId + ".phasing.txt";
+        }
         auto locusSpec = locusCatalog.at(locusId);
-        visualizeLocus(args.referencePath, args.readsPath, args.vcfPath, locusId, locusSpec, outputPath);
+        visualizeLocus(args.referencePath, args.readsPath, args.vcfPath, locusId, locusSpec, svgPath, phasingInfoPath);
     }
 
     return 0;

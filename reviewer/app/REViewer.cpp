@@ -69,7 +69,7 @@ optional<WorkflowArguments> getCommandLineArguments(int argc, char** argv)
 
     if (argumentMap.count("version"))
     {
-        std::cerr << "REViewer v0.2.3" << std::endl;
+        std::cerr << "REViewer v0.2.4" << std::endl;
         return boost::none;
     }
 

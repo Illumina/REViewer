@@ -107,7 +107,7 @@ int runWorkflow(const WorkflowArguments& args)
 {
     const int kFlankLength = 1000;
     Reference reference(args.referencePath);
-    auto locusCatalog = loadLocusCatalogFromDisk(args.catalogPath, reference, kFlankLength);
+    auto locusCatalog = loadLocusCatalogFromDisk(args.catalogPath, reference, args.locusExtensionLength);
 
     auto locusIds = getLocusIds(locusCatalog, args.locusId);
     for (const auto& locusId : locusIds)

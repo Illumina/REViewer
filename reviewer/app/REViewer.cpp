@@ -48,6 +48,7 @@ optional<WorkflowArguments> getCommandLineArguments(int argc, char** argv)
             ("reference", po::value<string>(&args.referencePath)->required(), "FASTA file with reference genome")
             ("catalog", po::value<string>(&args.catalogPath)->required(), "Variant catalog")
             ("locus", po::value<string>(&args.locusId)->required(), "Locus to analyze (or a list of comma-separated loci)")
+            ("region-extension-length", po::value<int>(&args.locusExtensionLength)->default_value(1000), "Length of flanking region (must match corresponding ExpansionHunter setting)")
             ("output-phasing-info", po::bool_switch(&args.outputPhasingInfo), "Output results of the haplotype estimation algorithm")
             ("output-prefix", po::value<string>(&args.outputPrefix)->required(), "Prefix for the output files");
     // clang-format on

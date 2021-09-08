@@ -1,8 +1,14 @@
 cmake_minimum_required(VERSION 3.7)
-project(REViewer VERSION 0.2.4 LANGUAGES C CXX)
+project(REViewer VERSION 0.2.4 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+if (NOT CMAKE_BUILD_TYPE)
+    set(DEFAULT_CMAKE_BUILD_TYPE Release)
+    set(CMAKE_BUILD_TYPE ${DEFAULT_CMAKE_BUILD_TYPE} CACHE STRING
+            "Choose the type of build (default: ${DEFAULT_CMAKE_BUILD_TYPE})" FORCE)
+endif ()
 
 set(Boost_USE_STATIC_LIBS ON)
 find_package(Boost 1.73 REQUIRED COMPONENTS program_options filesystem system)
@@ -49,7 +55,14 @@ target_include_directories(REViewer PUBLIC
         ${LIBLZMA_INCLUDE_DIRS}
         ${CURL_INCLUDE_DIRS}
         )
+
+# Set static linking of gcc standard libraries to simplify binary distribution
+if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+    set(STATIC_FLAGS -static-libgcc -static-libstdc++)
+endif()
+
 target_link_libraries(REViewer PUBLIC
+        ${STATIC_FLAGS}
         graphtools
         ${htslib}
         ${Boost_LIBRARIES}

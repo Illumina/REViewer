@@ -30,6 +30,7 @@ struct WorkflowArguments
     std::string referencePath;
     std::string locusId;
     std::string outputPrefix;
+    int locusExtensionLength;
     bool outputPhasingInfo;
 };
 

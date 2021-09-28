@@ -85,8 +85,9 @@ PairGraphAlignById getAligns(
     const int regionContigBamHeaderIndex = sam_hdr_name2tid(htsHeaderPtr, contigName);
     fai_destroy(referenceIndex);
 
-    const auto queryRegionStart = region.start() - 1000;
-    const auto queryRegionEnd = region.end() + 1000;
+    const auto& graph = locusSpec.regionGraph();
+    const auto queryRegionStart = region.start() - graph.nodeSeq(0).length();
+    const auto queryRegionEnd = region.end() + graph.nodeSeq(graph.numNodes() - 1).length();
     htsRegionPtr = sam_itr_queryi(htsIndexPtr, regionContigBamHeaderIndex, queryRegionStart, queryRegionEnd);
     if (htsRegionPtr == nullptr)
     {

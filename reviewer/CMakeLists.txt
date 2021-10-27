@@ -34,13 +34,11 @@ add_executable(REViewer
         app/GenomicRegion.hh app/GenomicRegion.cpp
         app/LocusSpecification.hh app/LocusSpecification.cpp
         app/VariantSpecification.hh app/VariantSpecification.cpp
-        app/Read.hh app/Read.cpp
         app/LocusSpecDecoding.hh app/LocusSpecDecoding.cpp
         app/RegionGraph.hh app/RegionGraph.cpp
         app/GraphBlueprint.hh app/GraphBlueprint.cpp
         app/GenotypePaths.hh app/GenotypePaths.cpp
         app/Aligns.hh app/Aligns.cpp
-        app/HtsHelpers.hh app/HtsHelpers.cpp
         app/Projection.hh app/Projection.cpp
         app/LanePlot.hh app/LanePlot.cpp
         app/GenerateSvg.hh app/GenerateSvg.cpp
@@ -57,9 +55,9 @@ target_include_directories(REViewer PUBLIC
         )
 
 # Set static linking of gcc standard libraries to simplify binary distribution
-if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
     set(STATIC_FLAGS -static-libgcc -static-libstdc++)
-endif()
+endif ()
 
 target_link_libraries(REViewer PUBLIC
         ${STATIC_FLAGS}

@@ -48,35 +48,34 @@ void visualizeLocus(
 {
     spdlog::info("Loading specification of locus {}", locusId);
 
-    ReadPairById fragById;
-    auto fragGraphAlignById = getAligns(readsPath, referencePath, locusSpec, fragById);
-    spdlog::info("Extracted {} frags", fragGraphAlignById.size());
+    auto fragById = getAligns(readsPath, referencePath, locusSpec);
+    spdlog::info("Extracted {} frags", fragById.size());
 
     spdlog::info("Calculating fragment length");
-    const int meanFragLen = getMeanFragLen(fragGraphAlignById);
+    const int meanFragLen = getMeanFragLen(fragById);
     spdlog::info("Fragment length is estimated to be {}", meanFragLen);
 
     spdlog::info("Extracting genotype paths");
-    auto pathsByGenotype = getCandidateGenotypePaths(meanFragLen, vcfPath, locusSpec);
+    auto pathsByDiplotype = getCandidateDiplotypePaths(meanFragLen, vcfPath, locusSpec);
 
     spdlog::info("Phasing");
-    auto genotypePaths = phase(fragGraphAlignById, pathsByGenotype, phasingInfoPath);
-    spdlog::info("Found {} paths defining genotype", genotypePaths.size());
+    auto diplotypePaths = phase(fragById, pathsByDiplotype, phasingInfoPath);
+    spdlog::info("Found {} paths defining diplotype", diplotypePaths.size());
 
     spdlog::info("Projecting reads onto haplotype paths");
-    auto pairPathAlignById = project(genotypePaths, fragGraphAlignById);
+    auto pairPathAlignById = project(diplotypePaths, fragById);
     spdlog::info("Projected {} read pairs", pairPathAlignById.size());
 
     spdlog::info("Generating fragment alignments");
-    auto fragPathAlignsById = resolveByFragLen(meanFragLen, genotypePaths, pairPathAlignById);
+    auto fragPathAlignsById = resolveByFragLen(meanFragLen, diplotypePaths, pairPathAlignById);
     spdlog::info("Generated {} fragment alignments", fragPathAlignsById.size());
 
     spdlog::info("Assigning fragment origins");
-    auto fragAssignment = getBestFragAssignment(genotypePaths, fragPathAlignsById);
+    auto fragAssignment = getBestFragAssignment(diplotypePaths, fragPathAlignsById);
     spdlog::info("Found assignments for {} frags", fragAssignment.fragIds.size());
 
     spdlog::info("Generating plot blueprint");
-    auto lanePlots = generateBlueprint(genotypePaths, fragById, fragAssignment, fragPathAlignsById);
+    auto lanePlots = generateBlueprint(diplotypePaths, fragById, fragAssignment, fragPathAlignsById);
 
     spdlog::info("Writing SVG image to disk");
     generateSvg(lanePlots, svgPath);

@@ -38,9 +38,9 @@ struct FragPathAlign
     ReadPathAlign mateAlign;
 };
 
-int getMeanFragLen(const PairGraphAlignById& pairGraphAlignById);
+int getMeanFragLen(const FragById& fragById);
 
 using FragPathAlignsById = std::map<std::string, std::vector<FragPathAlign>>;
 
 FragPathAlignsById
-resolveByFragLen(int meanFragLen, const GenotypePaths& paths, const PairPathAlignById& pairPathAlignById);
+resolveByFragLen(int meanFragLen, const DiplotypePaths& paths, const PairPathAlignById& pairPathAlignById);

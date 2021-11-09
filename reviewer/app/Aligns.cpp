@@ -44,8 +44,7 @@ using std::map;
 using std::string;
 using std::vector;
 
-PairGraphAlignById getAligns(
-    const string& htsFilePath, const string& referencePath, const LocusSpecification& locusSpec, ReadPairById& fragById)
+FragById getAligns(const string& readsPath, const string& referencePath, const LocusSpecification& locusSpec)
 {
     htsFile* htsFilePtr = nullptr;
     bam_hdr_t* htsHeaderPtr = nullptr;
@@ -53,10 +52,10 @@ PairGraphAlignById getAligns(
     hts_itr_t* htsRegionPtr = nullptr;
     bam1_t* htsAlignmentPtr = nullptr;
 
-    htsFilePtr = sam_open(htsFilePath.c_str(), "r");
+    htsFilePtr = sam_open(readsPath.c_str(), "r");
     if (!htsFilePtr)
     {
-        throw std::runtime_error("Failed to read BAM file " + htsFilePath);
+        throw std::runtime_error("Failed to read BAM file " + readsPath);
     }
 
     // Required step for parsing of some CRAMs
@@ -68,13 +67,13 @@ PairGraphAlignById getAligns(
     htsHeaderPtr = sam_hdr_read(htsFilePtr);
     if (!htsHeaderPtr)
     {
-        throw std::runtime_error("Failed to read header of " + htsFilePath);
+        throw std::runtime_error("Failed to read header of " + readsPath);
     }
 
-    htsIndexPtr = sam_index_load(htsFilePtr, htsFilePath.c_str());
+    htsIndexPtr = sam_index_load(htsFilePtr, readsPath.c_str());
     if (!htsIndexPtr)
     {
-        throw std::runtime_error("Failed to read index of " + htsFilePath);
+        throw std::runtime_error("Failed to read index of " + readsPath);
     }
 
     const GenomicRegion region = locusSpec.variantSpecs().front().referenceLocus();
@@ -94,9 +93,8 @@ PairGraphAlignById getAligns(
         throw std::runtime_error("Failed to extract reads from the specified region");
     }
 
-    PairGraphAlignById fragAlignById;
-    std::map<string, GraphAlignment> alignCache;
-    std::map<string, string> readCache;
+    FragById fragById;
+    std::map<string, Read> unpairedCache;
     htsAlignmentPtr = bam_init1();
     while (sam_itr_next(htsFilePtr, htsRegionPtr, htsAlignmentPtr) >= 0)
     {
@@ -108,6 +106,16 @@ PairGraphAlignById getAligns(
         for (int index = 0; index != readLength; ++index)
         {
             bases[index] = seq_nt16_str[bam_seqi(htsSeqPtr, index)];
+        }
+
+        // Decode base call quality sequence
+        string quals;
+        uint8_t* htsQualsPtr = bam_get_qual(htsAlignmentPtr);
+        quals.resize(readLength);
+
+        for (int index = 0; index != readLength; ++index)
+        {
+            quals[index] = static_cast<char>(33 + htsQualsPtr[index]);
         }
 
         // Decode graph alignment
@@ -153,25 +161,24 @@ PairGraphAlignById getAligns(
         }
 
         // Store read and alignment
-        if (alignCache.find(fragmentId) == alignCache.end())
+        if (unpairedCache.find(fragmentId) == unpairedCache.end())
         {
-            readCache.emplace(fragmentId, std::move(bases));
-            alignCache.emplace(std::move(fragmentId), std::move(align));
+            Read read(std::move(bases), std::move(quals), align);
+            unpairedCache.emplace(fragmentId, read);
         }
         else
         {
-            auto mate = std::move(readCache.at(fragmentId));
-            readCache.erase(fragmentId);
-            auto mateAlign = std::move(alignCache.at(fragmentId));
-            alignCache.erase(fragmentId);
-            fragById.emplace(fragmentId, ReadPair(bases, mate));
-            fragAlignById.emplace(std::move(fragmentId), PairGraphAlign(align, mateAlign));
+            auto mate = std::move(unpairedCache.at(fragmentId));
+            unpairedCache.erase(fragmentId);
+
+            Read read(bases, quals, align);
+            fragById.emplace(fragmentId, Frag(read, mate));
         }
     }
 
-    if (!alignCache.empty())
+    if (!unpairedCache.empty())
     {
-        spdlog::warn("Found {} unpaired reads", alignCache.size());
+        spdlog::warn("Found {} unpaired reads", unpairedCache.size());
     }
 
     bam_destroy1(htsAlignmentPtr);
@@ -189,5 +196,5 @@ PairGraphAlignById getAligns(
     sam_close(htsFilePtr);
     htsFilePtr = nullptr;
 
-    return fragAlignById;
+    return fragById;
 }

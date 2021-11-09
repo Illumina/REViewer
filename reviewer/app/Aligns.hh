@@ -31,33 +31,32 @@
 using GraphAlign = graphtools::GraphAlignment;
 using GraphAlignPtr = std::shared_ptr<GraphAlign>;
 
-struct ReadPair
+struct Read
 {
-    ReadPair(std::string read, std::string mate)
+    Read(std::string bases, std::string quals, GraphAlign align)
+        : bases(std::move(bases))
+        , quals(std::move(quals))
+        , align(std::move(align))
+    {
+    }
+
+    std::string bases;
+    std::string quals;
+    GraphAlign align;
+};
+
+struct Frag
+{
+    Frag(Read read, Read mate)
         : read(std::move(read))
         , mate(std::move(mate))
     {
     }
 
-    std::string read;
-    std::string mate;
+    Read read;
+    Read mate;
 };
 
-struct PairGraphAlign
-{
-    PairGraphAlign(GraphAlign readAlign, GraphAlign mateAlign)
-        : readAlign(std::move(readAlign))
-        , mateAlign(std::move(mateAlign))
-    {
-    }
+using FragById = std::map<std::string, Frag>;
 
-    GraphAlign readAlign;
-    GraphAlign mateAlign;
-};
-
-using ReadPairById = std::map<std::string, ReadPair>;
-using PairGraphAlignById = std::map<std::string, PairGraphAlign>;
-
-PairGraphAlignById getAligns(
-    const std::string& htsFilePath, const std::string& referencePath, const LocusSpecification& locusSpec,
-    ReadPairById& fragById);
+FragById getAligns(const std::string& readsPath, const std::string& referencePath, const LocusSpecification& locusSpec);

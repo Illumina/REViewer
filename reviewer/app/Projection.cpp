@@ -306,18 +306,20 @@ vector<ReadPathAlign> project(const GraphAlign& align, int pathIndex, const Path
     return pathAligns;
 }
 
-PairPathAlignById project(const vector<Path>& genotypePaths, const PairGraphAlignById& pairGraphAlignById)
+PairPathAlignById project(const vector<Path>& genotypePaths, const FragById& fragById)
 {
     PairPathAlignById pairPathAlignById;
-    for (const auto& idAndPairGraphAlign : pairGraphAlignById)
+    for (const auto& idAndFrag : fragById)
     {
+        const auto& fragId = idAndFrag.first;
+        const auto& frag = idAndFrag.second;
         PairPathAlign pathAlign;
         int bestPairScore = std::numeric_limits<int>::lowest();
         for (int pathIndex = 0; pathIndex != genotypePaths.size(); ++pathIndex)
         {
             const auto& path = genotypePaths[pathIndex];
-            vector<ReadPathAlign> readPathAligns = project(idAndPairGraphAlign.second.readAlign, pathIndex, path);
-            vector<ReadPathAlign> matePathAligns = project(idAndPairGraphAlign.second.mateAlign, pathIndex, path);
+            vector<ReadPathAlign> readPathAligns = project(frag.read.align, pathIndex, path);
+            vector<ReadPathAlign> matePathAligns = project(frag.mate.align, pathIndex, path);
             if (readPathAligns.empty() || matePathAligns.empty())
             {
                 continue;
@@ -339,7 +341,7 @@ PairPathAlignById project(const vector<Path>& genotypePaths, const PairGraphAlig
         }
 
         assert(!pathAlign.readAligns.empty() && !pathAlign.mateAligns.empty());
-        pairPathAlignById.emplace(idAndPairGraphAlign.first, pathAlign);
+        pairPathAlignById.emplace(fragId, pathAlign);
     }
 
     return pairPathAlignById;

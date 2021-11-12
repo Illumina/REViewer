@@ -27,6 +27,18 @@
 
 #include "app/LocusSpecification.hh"
 
-using GenotypePaths = std::vector<graphtools::Path>;
-std::vector<GenotypePaths>
-getCandidateGenotypePaths(int meanFragLen, const std::string& vcfPath, const LocusSpecification& locusSpec);
+using DiplotypePaths = std::vector<graphtools::Path>;
+
+/// Computes all possible diplotype paths at the given locus
+/// \param meanFragLen: Mean fragment length
+/// \param vcfPath: Path to the VCF file
+/// \param locusSpec: Locus specification
+/// \return Vector of all possible diplotype paths
+///
+/// Assumption:
+/// All haplotype paths start at the first base of left flank
+/// (node 0) and end at the last base of the right flank
+/// (last node)
+///
+std::vector<DiplotypePaths>
+getCandidateDiplotypePaths(int meanFragLen, const std::string& vcfPath, const LocusSpecification& locusSpec);

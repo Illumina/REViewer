@@ -58,5 +58,4 @@ struct PairPathAlign
 int score(const graphtools::GraphAlignment& alignment, int matchScore = 5, int mismatchScore = -4, int gapScore = -8);
 
 using PairPathAlignById = std::map<std::string, PairPathAlign>;
-PairPathAlignById
-project(const std::vector<graphtools::Path>& genotypePaths, const PairGraphAlignById& pairGraphAlignById);
+PairPathAlignById project(const std::vector<graphtools::Path>& genotypePaths, const FragById& fragById);

@@ -31,7 +31,7 @@ static int calcFragLen(const ReadPathAlign& readAlign, const ReadPathAlign& mate
 }
 
 FragPathAlignsById
-resolveByFragLen(int meanFragLen, const GenotypePaths& paths, const PairPathAlignById& pairPathAlignById)
+resolveByFragLen(int meanFragLen, const DiplotypePaths& paths, const PairPathAlignById& pairPathAlignById)
 {
     FragPathAlignsById fragPathAlignsById;
 
@@ -70,24 +70,25 @@ resolveByFragLen(int meanFragLen, const GenotypePaths& paths, const PairPathAlig
     return fragPathAlignsById;
 }
 
-int getMeanFragLen(const PairGraphAlignById& pairGraphAlignById)
+int getMeanFragLen(const FragById& fragById)
 {
-    if (pairGraphAlignById.empty())
+    if (fragById.empty())
     {
         throw std::runtime_error("There are no read alignments in the target region");
     }
 
     int leftFlankId = 0;
-    int rightFlankId = pairGraphAlignById.begin()->second.readAlign.path().graphRawPtr()->numNodes() - 1;
+    const auto& firstFrag = fragById.begin()->second;
+    graphtools::NodeId rightFlankId = firstFrag.read.align.path().graphRawPtr()->numNodes() - 1;
 
     double fragLenSum = 0;
     int numFlankingReads = 0;
-    for (const auto& idAndPairGraphAlign : pairGraphAlignById)
+    for (const auto& idAndFrag : fragById)
     {
-        const PairGraphAlign& pairAlign = idAndPairGraphAlign.second;
+        const auto& frag = idAndFrag.second;
 
-        const auto readStartNode = pairAlign.readAlign.path().getNodeIdByIndex(0);
-        const auto mateStartNode = pairAlign.mateAlign.path().getNodeIdByIndex(0);
+        const auto readStartNode = frag.read.align.path().getNodeIdByIndex(0);
+        const auto mateStartNode = frag.mate.align.path().getNodeIdByIndex(0);
 
         const bool matesStartOnLeftFlank = readStartNode == leftFlankId && mateStartNode == leftFlankId;
         const bool matesStartOnRightFlank = readStartNode == rightFlankId && mateStartNode == rightFlankId;
@@ -97,11 +98,11 @@ int getMeanFragLen(const PairGraphAlignById& pairGraphAlignById)
             continue;
         }
 
-        const int readStart = pairAlign.readAlign.path().startPosition();
-        const int readEnd = readStart + static_cast<int>(pairAlign.readAlign.queryLength());
+        const int readStart = frag.read.align.path().startPosition();
+        const int readEnd = readStart + static_cast<int>(frag.read.align.queryLength());
 
-        const int mateStart = pairAlign.mateAlign.path().startPosition();
-        const int mateEnd = mateStart + static_cast<int>(pairAlign.mateAlign.queryLength());
+        const int mateStart = frag.mate.align.path().startPosition();
+        const int mateEnd = mateStart + static_cast<int>(frag.read.align.queryLength());
 
         fragLenSum += readEnd <= mateEnd ? mateEnd - readStart : readEnd - mateStart;
         ++numFlankingReads;

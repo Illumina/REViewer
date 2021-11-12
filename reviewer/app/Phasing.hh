@@ -28,6 +28,6 @@
 
 #include <boost/optional.hpp>
 
-GenotypePaths phase(
-    const PairGraphAlignById& fragGraphAlignById, const std::vector<GenotypePaths>& pathsByGenotype,
+DiplotypePaths phase(
+    const FragById& fragById, const std::vector<DiplotypePaths>& pathsByGenotype,
     const boost::optional<std::string>& phasingInfoPath);

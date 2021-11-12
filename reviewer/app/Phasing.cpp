@@ -61,7 +61,7 @@ int scorePath(int pathIndex, const PairPathAlignById& pairPathAlignById)
     return pathScore;
 }
 
-using ScoredGenotype = pair<GenotypePaths, int>;
+using ScoredGenotype = pair<DiplotypePaths, int>;
 
 string summarizePath(const graphtools::Graph& graph, const graphtools::Path& path)
 {
@@ -103,12 +103,12 @@ string summarizePath(const graphtools::Graph& graph, const graphtools::Path& pat
 }
 
 void outputPhasingInfo(
-    const PairGraphAlignById& fragGraphAlignById, const vector<ScoredGenotype>& scoredGenotypes,
-    const string& phasingInfoPath)
+    const FragById& fragById, const vector<ScoredGenotype>& scoredGenotypes, const string& phasingInfoPath)
 {
     using GenotypePathSet = std::set<graphtools::Path>;
-    assert(!fragGraphAlignById.empty());
-    const graphtools::Graph& graph = *fragGraphAlignById.begin()->second.readAlign.path().graphRawPtr();
+    assert(!fragById.empty());
+    const auto& firstFrag = fragById.begin()->second;
+    const graphtools::Graph& graph = *firstFrag.read.align.path().graphRawPtr();
 
     ofstream phasingInfoFile(phasingInfoPath);
     if (phasingInfoFile.is_open())
@@ -142,8 +142,8 @@ void outputPhasingInfo(
     }
 }
 
-GenotypePaths phase(
-    const PairGraphAlignById& fragGraphAlignById, const vector<GenotypePaths>& pathsByGenotype,
+DiplotypePaths phase(
+    const FragById& fragGraphAlignById, const vector<DiplotypePaths>& pathsByGenotype,
     const optional<string>& phasingInfoPath)
 {
     vector<ScoredGenotype> scoredGenotypes;
@@ -163,9 +163,9 @@ GenotypePaths phase(
         scoredGenotypes.emplace_back(genotypePaths, genotypeScore);
     }
 
-    std::sort(scoredGenotypes.begin(), scoredGenotypes.end(), [](const ScoredGenotype& gt1, const ScoredGenotype& gt2) {
-        return gt1.second > gt2.second;
-    });
+    std::sort(
+        scoredGenotypes.begin(), scoredGenotypes.end(),
+        [](const ScoredGenotype& gt1, const ScoredGenotype& gt2) { return gt1.second > gt2.second; });
 
     if (phasingInfoPath)
     {

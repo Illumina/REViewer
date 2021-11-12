@@ -17,20 +17,3 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
-#pragma once
-
-#include <vector>
-
-#include <boost/optional.hpp>
-
-#include "graphcore/Path.hh"
-
-#include "app/FragLenFilter.hh"
-#include "app/GenomicRegion.hh"
-#include "app/Origin.hh"
-#include "app/Projection.hh"
-
-FragAssignment
-getBestFragAssignment(const std::vector<graphtools::Path>& hapPaths, const FragPathAlignsById& fragPathAlignsById);
-
-// FragAssignment removeFlankingReads(const FragPathAlignsById& infoByRead, const FragAssignment& fragAssignment);

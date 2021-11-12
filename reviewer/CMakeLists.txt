@@ -25,6 +25,22 @@ find_library(htslib hts)
 
 add_subdirectory(thirdparty/graph-tools)
 
+add_library(Core
+        core/Aligns.hh core/Aligns.cpp)
+
+target_link_libraries(Core PUBLIC
+        graphtools
+        ${Boost_LIBRARIES})
+
+target_include_directories(Core PUBLIC
+        ${Boost_INCLUDE_DIRS}
+        )
+
+add_library(SnpCalling
+        snps/Workflow.hh snps/Workflow.cpp)
+target_include_directories(SnpCalling PUBLIC ${CMAKE_SOURCE_DIR})
+target_link_libraries(SnpCalling PUBLIC Core)
+
 add_executable(REViewer
         app/REViewer.cpp
         app/Workflow.cpp app/Workflow.hh
@@ -46,10 +62,8 @@ add_executable(REViewer
         app/Phasing.hh app/Phasing.cpp
         app/FragLenFilter.hh app/FragLenFilter.cpp)
 
-
 target_include_directories(REViewer PUBLIC
         ${CMAKE_SOURCE_DIR}
-        ${Boost_INCLUDE_DIRS}
         ${LIBLZMA_INCLUDE_DIRS}
         ${CURL_INCLUDE_DIRS}
         )
@@ -60,15 +74,21 @@ if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
 endif ()
 
 target_link_libraries(REViewer PUBLIC
+        Core
         ${STATIC_FLAGS}
-        graphtools
         ${htslib}
-        ${Boost_LIBRARIES}
         ${LIBLZMA_LIBRARIES}
         ${CURL_LIBRARIES}
         ZLIB::ZLIB
         BZip2::BZip2
         Threads::Threads)
 
+
 install(TARGETS REViewer RUNTIME DESTINATION bin)
 
+add_executable(UnitTests
+        tests/UnitTests.cpp
+        snps/WorkflowTest.cpp)
+target_include_directories(UnitTests PUBLIC ${CMAKE_SOURCE_DIR})
+
+target_link_libraries(UnitTests SnpCalling Catch2::Catch2)

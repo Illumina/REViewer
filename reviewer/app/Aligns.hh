@@ -24,39 +24,8 @@
 #include <memory>
 #include <string>
 
-#include "graphalign/GraphAlignment.hh"
+#include "core/Aligns.hh"
 
 #include "app/LocusSpecification.hh"
-
-using GraphAlign = graphtools::GraphAlignment;
-using GraphAlignPtr = std::shared_ptr<GraphAlign>;
-
-struct Read
-{
-    Read(std::string bases, std::string quals, GraphAlign align)
-        : bases(std::move(bases))
-        , quals(std::move(quals))
-        , align(std::move(align))
-    {
-    }
-
-    std::string bases;
-    std::string quals;
-    GraphAlign align;
-};
-
-struct Frag
-{
-    Frag(Read read, Read mate)
-        : read(std::move(read))
-        , mate(std::move(mate))
-    {
-    }
-
-    Read read;
-    Read mate;
-};
-
-using FragById = std::map<std::string, Frag>;
 
 FragById getAligns(const std::string& readsPath, const std::string& referencePath, const LocusSpecification& locusSpec);

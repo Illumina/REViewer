@@ -19,14 +19,16 @@ find_package(BZip2 REQUIRED)
 find_package(LibLZMA REQUIRED)
 find_package(CURL REQUIRED)
 find_package(Catch2 REQUIRED)
+message(STATUS "Catch2 ${Catch2_DIR}")
 find_package(Threads REQUIRED)
 find_library(htslib libhts.a)
 find_library(htslib hts)
 
+enable_testing()
+
 add_subdirectory(thirdparty/graph-tools)
 
-add_executable(REViewer
-        app/REViewer.cpp
+add_library(REViewerLib
         app/Workflow.cpp app/Workflow.hh
         app/CatalogLoading.hh app/CatalogLoading.cpp
         app/ReferenceContigInfo.hh app/ReferenceContigInfo.cpp
@@ -47,7 +49,7 @@ add_executable(REViewer
         app/FragLenFilter.hh app/FragLenFilter.cpp)
 
 
-target_include_directories(REViewer PUBLIC
+target_include_directories(REViewerLib PUBLIC
         ${CMAKE_SOURCE_DIR}
         ${Boost_INCLUDE_DIRS}
         ${LIBLZMA_INCLUDE_DIRS}
@@ -59,7 +61,7 @@ if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
     set(STATIC_FLAGS -static-libgcc -static-libstdc++)
 endif ()
 
-target_link_libraries(REViewer PUBLIC
+target_link_libraries(REViewerLib PUBLIC
         ${STATIC_FLAGS}
         graphtools
         ${htslib}
@@ -70,5 +72,17 @@ target_link_libraries(REViewer PUBLIC
         BZip2::BZip2
         Threads::Threads)
 
-install(TARGETS REViewer RUNTIME DESTINATION bin)
+add_executable(REViewer
+        app/REViewer.cpp
+        )
+target_link_libraries(REViewer REViewerLib)
 
+#add_executable(UnitTests
+#        tests/ExampleTest.cpp
+#        )
+
+#target_link_libraries(UnitTests REViewerLib Catch2::Catch2)
+
+#add_test(NAME UnitTests COMMAND UnitTests)
+
+install(TARGETS REViewer RUNTIME DESTINATION bin)

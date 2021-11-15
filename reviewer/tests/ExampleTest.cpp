@@ -1,5 +1,5 @@
 
-#include <catch2/catch2.hpp>
+#include <catch.hpp>
 
 TEST_CASE( "Foo", "foo" ) {
     int a = 1;

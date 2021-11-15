@@ -77,12 +77,12 @@ add_executable(REViewer
         )
 target_link_libraries(REViewer REViewerLib)
 
-#add_executable(UnitTests
-#        tests/ExampleTest.cpp
-#        )
+add_executable(UnitTests
+        tests/ExampleTest.cpp
+        )
 
-#target_link_libraries(UnitTests REViewerLib Catch2::Catch2)
+target_link_libraries(UnitTests REViewerLib Catch2::Catch2)
 
-#add_test(NAME UnitTests COMMAND UnitTests)
+add_test(NAME UnitTests COMMAND UnitTests)
 
-install(TARGETS REViewer RUNTIME DESTINATION bin)
+install(TARGETS REViewer UnitTests RUNTIME DESTINATION bin)

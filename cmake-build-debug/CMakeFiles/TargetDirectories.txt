@@ -1,0 +1,7 @@
+/Users/sclamons/Documents/software/REViewer/cmake-build-debug/CMakeFiles/reviewer.dir
+/Users/sclamons/Documents/software/REViewer/cmake-build-debug/CMakeFiles/catch2.dir
+/Users/sclamons/Documents/software/REViewer/cmake-build-debug/CMakeFiles/spdlog.dir
+/Users/sclamons/Documents/software/REViewer/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/Users/sclamons/Documents/software/REViewer/cmake-build-debug/CMakeFiles/Boost.dir
+/Users/sclamons/Documents/software/REViewer/cmake-build-debug/CMakeFiles/edit_cache.dir
+/Users/sclamons/Documents/software/REViewer/cmake-build-debug/CMakeFiles/htslib.dir

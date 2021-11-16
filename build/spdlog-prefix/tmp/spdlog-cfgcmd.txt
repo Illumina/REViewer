@@ -1,0 +1,1 @@
+cmd='/usr/local/Cellar/cmake/3.21.3/bin/cmake;-DCMAKE_INSTALL_PREFIX:PATH=/Users/sclamons/Documents/software/REViewer/build/install;-DCMAKE_C_COMPILER=/Library/Developer/CommandLineTools/usr/bin/cc;-DCMAKE_CXX_COMPILER=/Library/Developer/CommandLineTools/usr/bin/c++;-GUnix Makefiles;<SOURCE_DIR><SOURCE_SUBDIR>'

@@ -1,0 +1,43 @@
+{
+	"sources" : 
+	[
+		{
+			"file" : "/Users/sclamons/Documents/software/REViewer/build/CMakeFiles/Boost"
+		},
+		{
+			"file" : "/Users/sclamons/Documents/software/REViewer/build/CMakeFiles/Boost.rule"
+		},
+		{
+			"file" : "/Users/sclamons/Documents/software/REViewer/build/CMakeFiles/Boost-complete.rule"
+		},
+		{
+			"file" : "/Users/sclamons/Documents/software/REViewer/build/Boost-prefix/src/Boost-stamp/Boost-build.rule"
+		},
+		{
+			"file" : "/Users/sclamons/Documents/software/REViewer/build/Boost-prefix/src/Boost-stamp/Boost-configure.rule"
+		},
+		{
+			"file" : "/Users/sclamons/Documents/software/REViewer/build/Boost-prefix/src/Boost-stamp/Boost-download.rule"
+		},
+		{
+			"file" : "/Users/sclamons/Documents/software/REViewer/build/Boost-prefix/src/Boost-stamp/Boost-install.rule"
+		},
+		{
+			"file" : "/Users/sclamons/Documents/software/REViewer/build/Boost-prefix/src/Boost-stamp/Boost-mkdir.rule"
+		},
+		{
+			"file" : "/Users/sclamons/Documents/software/REViewer/build/Boost-prefix/src/Boost-stamp/Boost-patch.rule"
+		},
+		{
+			"file" : "/Users/sclamons/Documents/software/REViewer/build/Boost-prefix/src/Boost-stamp/Boost-update.rule"
+		}
+	],
+	"target" : 
+	{
+		"labels" : 
+		[
+			"Boost"
+		],
+		"name" : "Boost"
+	}
+}

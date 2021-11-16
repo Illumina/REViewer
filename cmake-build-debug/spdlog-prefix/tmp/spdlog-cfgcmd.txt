@@ -1,0 +1,1 @@
+cmd='/Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake;-DCMAKE_INSTALL_PREFIX:PATH=/Users/sclamons/Documents/software/REViewer/cmake-build-debug/install;-DCMAKE_C_COMPILER=/Library/Developer/CommandLineTools/usr/bin/cc;-DCMAKE_CXX_COMPILER=/Library/Developer/CommandLineTools/usr/bin/c++;-GCodeBlocks - Unix Makefiles;<SOURCE_DIR><SOURCE_SUBDIR>'

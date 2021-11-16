@@ -1,0 +1,13 @@
+# Target labels
+ spdlog
+# Source files and their labels
+/Users/sclamons/Documents/software/REViewer/cmake-build-debug/CMakeFiles/spdlog
+/Users/sclamons/Documents/software/REViewer/cmake-build-debug/CMakeFiles/spdlog.rule
+/Users/sclamons/Documents/software/REViewer/cmake-build-debug/CMakeFiles/spdlog-complete.rule
+/Users/sclamons/Documents/software/REViewer/cmake-build-debug/spdlog-prefix/src/spdlog-stamp/spdlog-build.rule
+/Users/sclamons/Documents/software/REViewer/cmake-build-debug/spdlog-prefix/src/spdlog-stamp/spdlog-configure.rule
+/Users/sclamons/Documents/software/REViewer/cmake-build-debug/spdlog-prefix/src/spdlog-stamp/spdlog-download.rule
+/Users/sclamons/Documents/software/REViewer/cmake-build-debug/spdlog-prefix/src/spdlog-stamp/spdlog-install.rule
+/Users/sclamons/Documents/software/REViewer/cmake-build-debug/spdlog-prefix/src/spdlog-stamp/spdlog-mkdir.rule
+/Users/sclamons/Documents/software/REViewer/cmake-build-debug/spdlog-prefix/src/spdlog-stamp/spdlog-patch.rule
+/Users/sclamons/Documents/software/REViewer/cmake-build-debug/spdlog-prefix/src/spdlog-stamp/spdlog-update.rule

@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6"/>
+	<Project>
+		<Option title="REViewer"/>
+		<Option makefile_is_custom="1"/>
+		<Option compiler="gcc"/>
+		<Option virtualFolders="CMake Files\;CMake Files\cmake-build-debug\;CMake Files\cmake-build-debug\htslib-prefix\;CMake Files\cmake-build-debug\htslib-prefix\tmp\;CMake Files\cmake-build-debug\Boost-prefix\;CMake Files\cmake-build-debug\Boost-prefix\tmp\;CMake Files\cmake-build-debug\spdlog-prefix\;CMake Files\cmake-build-debug\spdlog-prefix\tmp\;CMake Files\cmake-build-debug\catch2-prefix\;CMake Files\cmake-build-debug\catch2-prefix\tmp\;CMake Files\cmake-build-debug\reviewer-prefix\;CMake Files\cmake-build-debug\reviewer-prefix\tmp\;"/>
+		<Build>
+			<Target title="all">
+				<Option working_dir="/Users/sclamons/Documents/software/REViewer/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j16 -f &quot;/Users/sclamons/Documents/software/REViewer/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="/usr/bin/make -j16 -f &quot;/Users/sclamons/Documents/software/REViewer/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j16 -f &quot;/Users/sclamons/Documents/software/REViewer/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j16 -f &quot;/Users/sclamons/Documents/software/REViewer/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="reviewer">
+				<Option working_dir="/Users/sclamons/Documents/software/REViewer/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j16 -f &quot;/Users/sclamons/Documents/software/REViewer/cmake-build-debug/Makefile&quot;  VERBOSE=1 reviewer"/>
+					<CompileFile command="/usr/bin/make -j16 -f &quot;/Users/sclamons/Documents/software/REViewer/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j16 -f &quot;/Users/sclamons/Documents/software/REViewer/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j16 -f &quot;/Users/sclamons/Documents/software/REViewer/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="catch2">
+				<Option working_dir="/Users/sclamons/Documents/software/REViewer/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j16 -f &quot;/Users/sclamons/Documents/software/REViewer/cmake-build-debug/Makefile&quot;  VERBOSE=1 catch2"/>
+					<CompileFile command="/usr/bin/make -j16 -f &quot;/Users/sclamons/Documents/software/REViewer/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j16 -f &quot;/Users/sclamons/Documents/software/REViewer/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j16 -f &quot;/Users/sclamons/Documents/software/REViewer/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="spdlog">
+				<Option working_dir="/Users/sclamons/Documents/software/REViewer/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j16 -f &quot;/Users/sclamons/Documents/software/REViewer/cmake-build-debug/Makefile&quot;  VERBOSE=1 spdlog"/>
+					<CompileFile command="/usr/bin/make -j16 -f &quot;/Users/sclamons/Documents/software/REViewer/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j16 -f &quot;/Users/sclamons/Documents/software/REViewer/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j16 -f &quot;/Users/sclamons/Documents/software/REViewer/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="rebuild_cache">
+				<Option working_dir="/Users/sclamons/Documents/software/REViewer/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j16 -f &quot;/Users/sclamons/Documents/software/REViewer/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="/usr/bin/make -j16 -f &quot;/Users/sclamons/Documents/software/REViewer/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j16 -f &quot;/Users/sclamons/Documents/software/REViewer/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j16 -f &quot;/Users/sclamons/Documents/software/REViewer/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="Boost">
+				<Option working_dir="/Users/sclamons/Documents/software/REViewer/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j16 -f &quot;/Users/sclamons/Documents/software/REViewer/cmake-build-debug/Makefile&quot;  VERBOSE=1 Boost"/>
+					<CompileFile command="/usr/bin/make -j16 -f &quot;/Users/sclamons/Documents/software/REViewer/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j16 -f &quot;/Users/sclamons/Documents/software/REViewer/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j16 -f &quot;/Users/sclamons/Documents/software/REViewer/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="edit_cache">
+				<Option working_dir="/Users/sclamons/Documents/software/REViewer/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j16 -f &quot;/Users/sclamons/Documents/software/REViewer/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="/usr/bin/make -j16 -f &quot;/Users/sclamons/Documents/software/REViewer/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j16 -f &quot;/Users/sclamons/Documents/software/REViewer/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j16 -f &quot;/Users/sclamons/Documents/software/REViewer/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="htslib">
+				<Option working_dir="/Users/sclamons/Documents/software/REViewer/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j16 -f &quot;/Users/sclamons/Documents/software/REViewer/cmake-build-debug/Makefile&quot;  VERBOSE=1 htslib"/>
+					<CompileFile command="/usr/bin/make -j16 -f &quot;/Users/sclamons/Documents/software/REViewer/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j16 -f &quot;/Users/sclamons/Documents/software/REViewer/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j16 -f &quot;/Users/sclamons/Documents/software/REViewer/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Unit filename="/Users/sclamons/Documents/software/REViewer/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+		<Unit filename="/Users/sclamons/Documents/software/REViewer/cmake-build-debug/htslib-prefix/tmp/htslib-cfgcmd.txt.in">
+			<Option virtualFolder="CMake Files\cmake-build-debug\htslib-prefix\tmp\"/>
+		</Unit>
+		<Unit filename="/Users/sclamons/Documents/software/REViewer/cmake-build-debug/Boost-prefix/tmp/Boost-cfgcmd.txt.in">
+			<Option virtualFolder="CMake Files\cmake-build-debug\Boost-prefix\tmp\"/>
+		</Unit>
+		<Unit filename="/Users/sclamons/Documents/software/REViewer/cmake-build-debug/spdlog-prefix/tmp/spdlog-cfgcmd.txt.in">
+			<Option virtualFolder="CMake Files\cmake-build-debug\spdlog-prefix\tmp\"/>
+		</Unit>
+		<Unit filename="/Users/sclamons/Documents/software/REViewer/cmake-build-debug/catch2-prefix/tmp/catch2-cfgcmd.txt.in">
+			<Option virtualFolder="CMake Files\cmake-build-debug\catch2-prefix\tmp\"/>
+		</Unit>
+		<Unit filename="/Users/sclamons/Documents/software/REViewer/cmake-build-debug/reviewer-prefix/tmp/reviewer-cfgcmd.txt.in">
+			<Option virtualFolder="CMake Files\cmake-build-debug\reviewer-prefix\tmp\"/>
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>

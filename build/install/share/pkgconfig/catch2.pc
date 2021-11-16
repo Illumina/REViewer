@@ -1,0 +1,7 @@
+includedir=/Users/sclamons/Documents/software/REViewer/build/install/include
+
+Name: Catch2
+Description: A modern, C++-native, header-only, test framework for C++11
+URL: https://github.com/catchorg/Catch2
+Version: 2.12.4
+Cflags: -I${includedir}

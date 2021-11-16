@@ -1,3 +1,7 @@
+# Hidden files, system files, and CLion IDE folder
+.*
+!.gitignore
+
 # Build folders
 build/
 cmake-build-debug/

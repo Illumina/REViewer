@@ -1,6 +1,0 @@
-/Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_DEPENDS_USE_COMPILER=FALSE -G "CodeBlocks - Unix Makefiles" /Users/sclamons/Documents/software/REViewer/reviewer
--- Found Boost: /usr/local/lib/cmake/Boost-1.76.0/BoostConfig.cmake (found suitable version "1.76.0", minimum required is "1.73") found components: program_options filesystem system 
--- Found Boost: /usr/local/lib/cmake/Boost-1.76.0/BoostConfig.cmake (found suitable version "1.76.0", minimum required is "1.5") found components: program_options filesystem system 
--- Configuring done
--- Generating done
--- Build files have been written to: /Users/sclamons/Documents/software/REViewer/reviewer/cmake-build-debug

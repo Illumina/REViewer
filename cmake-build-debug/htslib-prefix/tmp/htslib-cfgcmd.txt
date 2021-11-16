@@ -1,1 +1,0 @@
-cmd='./configure;--prefix=/Users/sclamons/Documents/software/REViewer/cmake-build-debug/install;--disable-libcurl'

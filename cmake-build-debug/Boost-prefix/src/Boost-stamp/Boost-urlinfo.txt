@@ -1,3 +1,0 @@
-repository='external project URL'
-module='https://boostorg.jfrog.io/artifactory/main/release/1.73.0/source/boost_1_73_0.tar.bz2'
-tag=''

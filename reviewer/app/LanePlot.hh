@@ -95,5 +95,5 @@ struct Lane
 using LanePlot = std::vector<Lane>;
 
 std::vector<LanePlot> generateBlueprint(
-    std::vector<graphtools::Path> paths, const ReadPairById& fragById, const FragAssignment& fragAssignment,
+    std::vector<graphtools::Path> paths, const FragById& fragById, const FragAssignment& fragAssignment,
     const FragPathAlignsById& fragPathAlignsById);

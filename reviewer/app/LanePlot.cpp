@@ -84,23 +84,23 @@ static bool singlePath(const vector<FragPathAlign>& fragPathAligns)
 }
 
 list<ReadAlignOrigin> extractReadInfo(
-    const FragAssignment& fragAssignment, const ReadPairById& fragById, const FragPathAlignsById& fragPathAlignsById)
+    const FragAssignment& fragAssignment, const FragById& fragById, const FragPathAlignsById& fragPathAlignsById)
 {
     list<ReadAlignOrigin> readInfo;
     for (int fragIndex = 0; fragIndex != fragAssignment.fragIds.size(); ++fragIndex)
     {
         const auto& fragId = fragAssignment.fragIds[fragIndex];
-        const ReadPair& frag = fragById.at(fragId);
+        const auto& frag = fragById.at(fragId);
         const int alignIndex = fragAssignment.alignIndexByFrag[fragIndex];
         const FragPathAlign& fragAlign = fragPathAlignsById.at(fragId)[alignIndex];
 
         const bool consistentWithMultiplePaths = !singlePath(fragPathAlignsById.at(fragId));
 
         GenomicRegion readRegion(fragAlign.readAlign.pathIndex, fragAlign.readAlign.begin, fragAlign.readAlign.end);
-        readInfo.emplace_back(frag.read, *fragAlign.readAlign.align, readRegion, consistentWithMultiplePaths);
+        readInfo.emplace_back(frag.read.bases, *fragAlign.readAlign.align, readRegion, consistentWithMultiplePaths);
 
         GenomicRegion mateRegion(fragAlign.mateAlign.pathIndex, fragAlign.mateAlign.begin, fragAlign.mateAlign.end);
-        readInfo.emplace_back(frag.mate, *fragAlign.mateAlign.align, mateRegion, consistentWithMultiplePaths);
+        readInfo.emplace_back(frag.mate.bases, *fragAlign.mateAlign.align, mateRegion, consistentWithMultiplePaths);
     }
     return readInfo;
 }
@@ -247,7 +247,8 @@ static list<Segment> getSegments(int hapIndex, const list<ReadAlignOrigin>& info
 
         const auto& align = readInfo.align;
 
-        const int segmentStart = [&] {
+        const int segmentStart = [&]
+        {
             int start = origin.start();
             const auto& firstOperation = align.alignments().front().front();
             if (firstOperation.type() == OperationType::kSoftclip)
@@ -405,9 +406,8 @@ static void addHaplotypePathLane(const Path& hapPath, LanePlot& lanePlot)
 static void addSegmentLanes(list<Segment>& hapSegments, LanePlot& lanePlot)
 {
     using IntTuple = std::tuple<int, int>;
-    hapSegments.sort([](const Segment& lhs, const Segment& rhs) {
-        return IntTuple(lhs.end, lhs.start) < IntTuple(rhs.end, rhs.start);
-    });
+    hapSegments.sort([](const Segment& lhs, const Segment& rhs)
+                     { return IntTuple(lhs.end, lhs.start) < IntTuple(rhs.end, rhs.start); });
 
     while (!hapSegments.empty())
     {
@@ -473,7 +473,7 @@ void removeFlankingReads(list<ReadAlignOrigin>& infoByRead)
 }
 
 vector<LanePlot> generateBlueprint(
-    vector<Path> paths, const ReadPairById& fragById, const FragAssignment& fragAssignment,
+    vector<Path> paths, const FragById& fragById, const FragAssignment& fragAssignment,
     const FragPathAlignsById& fragPathAlignsById)
 {
     auto infoByRead = extractReadInfo(fragAssignment, fragById, fragPathAlignsById);

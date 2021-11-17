@@ -1,0 +1,73 @@
+[
+    {
+        "VariantType": "Repeat",
+        "LocusId": "BEAN1",
+        "HGNCId": 24160,
+        "InheritanceMode":"AD" ,
+        "DisplayRU": "TGGAA",
+        "SourceDisplay": "Sato et al AJHG 2009",
+        "Source": "PubMed",
+        "SourceId": "19878914",
+        "LocusStructure": "(TGGAA)*(TAAAA)*",
+        "ReferenceRegion": ["chr16:66490398-66490458", "chr16:66490399-66490453"],
+        "VariantType": ["Repeat", "Repeat"],
+        "VariantID": ["BEAN1_TGGAA", "BEAN1_TAAAA"],
+        "Disease": "SCA31",
+        "NormalMax": 10,
+        "PathologicMin": 40
+    },
+    {
+        "LocusId": "JPH3",
+        "HGNCId": 14203,
+        "InheritanceMode": "AD",
+        "DisplayRU": "CTG",
+        "SourceDisplay": "GeneReviews Internet 2019-06-27",
+        "Source": "GeneReviews",
+        "SourceId": "NBK1529",
+        "LocusStructure": "(CTG)*",
+        "ReferenceRegion": "chr16:87604287-87604329",
+        "VariantType": "Repeat",
+        "Disease": "HDL2",
+        "NormalMax": 28,
+        "PathologicMin": 40
+    },
+    {
+        "VariantType": "Repeat",
+        "LocusId": "TNRC6A",
+        "HGNCId": 11969,
+        "InheritanceMode": "AD",
+        "DisplayRU": "TTTCA",
+        "SourceDisplay": "Ishiura et al (2018) Nature Genetics 50 581-90",
+        "Source": "PubMed",
+        "SourceId": "29507423",
+        "LocusStructure": "(TTTTA)*",
+        "ReferenceRegion": [
+            "chr16:24613438-24613532"
+        ],
+        "VariantType": [
+            "Repeat"
+        ],
+        "VariantId": [
+            "TNRC6A"
+        ],
+      "PathologicRegion": "chr16:24613478-24613483",
+      "Disease": "FAME6",
+      "NormalMax": 1,
+      "PathologicMin": 10
+    },
+    {
+        "VariantType": "Repeat",
+        "LocusId": "XYLT1",
+        "HGNCId": 15516,
+        "InheritanceMode": "AR",
+        "DisplayRU": "GGC",
+        "SourceDisplay": "LaCroix et al (2018) AJHG 104(1) 35-44",
+        "Source": "PubMed",
+        "SourceId": "30554721",
+        "LocusStructure": "(GGC)*",
+        "ReferenceRegion": "chr16:17470908-17470921",
+        "Disease": "DBQD2",
+        "NormalMax": 20,
+        "PathologicMin": 70
+    }
+]

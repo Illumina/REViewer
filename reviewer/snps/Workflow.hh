@@ -17,20 +17,24 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
+
 #pragma once
 
 #include <vector>
 
-#include <boost/optional.hpp>
+#include "core/Aligns.hh"
 
-#include "graphcore/Path.hh"
+namespace snps
+{
 
-#include "app/FragLenFilter.hh"
-#include "app/GenomicRegion.hh"
-#include "app/Origin.hh"
-#include "app/Projection.hh"
+class SnpCalls
+{
+public:
+    bool operator==(const SnpCalls& other) const { return true; }
+};
 
-FragAssignment
-getBestFragAssignment(const std::vector<graphtools::Path>& hapPaths, const FragPathAlignsById& fragPathAlignsById);
+SnpCalls callSnps(
+    GraphPaths paths, const FragById& fragById, const FragAssignment& fragAssignment,
+    const FragPathAlignsById& fragPathAlignsById);
 
-// FragAssignment removeFlankingReads(const FragPathAlignsById& infoByRead, const FragAssignment& fragAssignment);
+}

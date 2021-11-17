@@ -25,22 +25,7 @@
 
 #include "app/Projection.hh"
 
-struct FragPathAlign
-{
-    FragPathAlign(ReadPathAlign readAlign, ReadPathAlign mateAlign)
-        : readAlign(std::move(readAlign))
-        , mateAlign(std::move(mateAlign))
-    {
-        assert(this->readAlign.pathIndex == this->mateAlign.pathIndex);
-    }
-
-    ReadPathAlign readAlign;
-    ReadPathAlign mateAlign;
-};
-
 int getMeanFragLen(const FragById& fragById);
-
-using FragPathAlignsById = std::map<std::string, std::vector<FragPathAlign>>;
 
 FragPathAlignsById
 resolveByFragLen(int meanFragLen, const DiplotypePaths& paths, const PairPathAlignById& pairPathAlignById);

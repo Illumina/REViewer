@@ -17,20 +17,19 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
-#pragma once
 
-#include <vector>
+#include "snps/Workflow.hh"
 
-#include <boost/optional.hpp>
+#include <catch2/catch.hpp>
 
-#include "graphcore/Path.hh"
+using namespace snps;
 
-#include "app/FragLenFilter.hh"
-#include "app/GenomicRegion.hh"
-#include "app/Origin.hh"
-#include "app/Projection.hh"
-
-FragAssignment
-getBestFragAssignment(const std::vector<graphtools::Path>& hapPaths, const FragPathAlignsById& fragPathAlignsById);
-
-// FragAssignment removeFlankingReads(const FragPathAlignsById& infoByRead, const FragAssignment& fragAssignment);
+TEST_CASE("Initializing SNP calling workflow", "[SNP calling]")
+{
+    GraphPaths paths;
+    FragById fragById;
+    FragAssignment fragAssignment({}, {});
+    FragPathAlignsById fragPathAlignsById;
+    auto snpCalls = callSnps(paths, fragById, fragAssignment, fragPathAlignsById);
+    REQUIRE(snpCalls == SnpCalls());
+}

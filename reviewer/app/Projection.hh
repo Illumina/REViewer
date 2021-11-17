@@ -31,17 +31,6 @@
 #include "app/Aligns.hh"
 #include "app/GenotypePaths.hh"
 
-struct ReadPathAlign
-{
-    ReadPathAlign(const graphtools::Path& hapPath, int pathIndex, int startIndexOnPath, GraphAlignPtr align);
-
-    int pathIndex;
-    int startIndexOnPath;
-    int begin;
-    int end;
-    GraphAlignPtr align;
-};
-
 struct PairPathAlign
 {
     PairPathAlign() = default;

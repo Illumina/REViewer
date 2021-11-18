@@ -43,9 +43,9 @@ using std::string;
 using std::unordered_map;
 using std::vector;
 
-void visualizeLocus(
+static void analyzeLocus(
     const string& referencePath, const string& readsPath, const string& vcfPath, const string& locusId,
-    const LocusSpecification& locusSpec, const string& svgPath, const optional<string>& phasingInfoPath)
+    const LocusSpecification& locusSpec, const string& outputPrefix, bool outputPhasingInfo)
 {
     spdlog::info("Loading specification of locus {}", locusId);
 
@@ -60,6 +60,12 @@ void visualizeLocus(
     auto pathsByDiplotype = getCandidateDiplotypePaths(meanFragLen, vcfPath, locusSpec);
 
     spdlog::info("Phasing");
+    optional<string> phasingInfoPath;
+    if (outputPhasingInfo)
+    {
+        phasingInfoPath = outputPrefix + ".phasing.txt";
+    }
+
     auto diplotypePaths = phase(fragById, pathsByDiplotype, phasingInfoPath);
     spdlog::info("Found {} paths defining diplotype", diplotypePaths.size());
 
@@ -76,13 +82,13 @@ void visualizeLocus(
     spdlog::info("Found assignments for {} frags", fragAssignment.fragIds.size());
 
     spdlog::info("Generating metrics");
-    getMetrics(locusSpec, diplotypePaths, fragById, fragAssignment, fragPathAlignsById);
+    getMetrics(locusSpec, diplotypePaths, fragById, fragAssignment, fragPathAlignsById, outputPrefix);
 
     spdlog::info("Generating plot blueprint");
     auto lanePlots = generateBlueprint(diplotypePaths, fragById, fragAssignment, fragPathAlignsById);
 
     spdlog::info("Writing SVG image to disk");
-    generateSvg(lanePlots, svgPath);
+    generateSvg(lanePlots, outputPrefix + ".svg");
 }
 
 vector<string> getLocusIds(const RegionCatalog& catalog, const string& encoding)
@@ -115,14 +121,11 @@ int runWorkflow(const WorkflowArguments& args)
     auto locusIds = getLocusIds(locusCatalog, args.locusId);
     for (const auto& locusId : locusIds)
     {
-        const string svgPath = args.outputPrefix + "." + locusId + ".svg";
-        optional<string> phasingInfoPath;
-        if (args.outputPhasingInfo)
-        {
-            phasingInfoPath = args.outputPrefix + "." + locusId + ".phasing.txt";
-        }
+        const string locusOutputPrefix = args.outputPrefix + "." + locusId;
         auto locusSpec = locusCatalog.at(locusId);
-        visualizeLocus(args.referencePath, args.readsPath, args.vcfPath, locusId, locusSpec, svgPath, phasingInfoPath);
+        analyzeLocus(
+            args.referencePath, args.readsPath, args.vcfPath, locusId, locusSpec, locusOutputPrefix,
+            args.outputPhasingInfo);
     }
 
     return 0;

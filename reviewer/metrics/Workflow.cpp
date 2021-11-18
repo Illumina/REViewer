@@ -21,41 +21,59 @@
 #include "metrics/Workflow.hh"
 
 #include <algorithm>
+#include <fstream>
+#include <map>
+#include <sstream>
 #include <vector>
 
+using graphtools::NodeId;
+using std::map;
+using std::ofstream;
+using std::string;
 using std::vector;
 
-static void
-getAlleleDepth(const LocusSpecification& locusSpec, const GraphPath& hapPath, const vector<GraphAlignPtr>& hapAligns)
+static int getTotalMatchesToNode(NodeId targetNode, const vector<GraphAlignPtr>& hapAligns)
+{
+    int numMatches = 0;
+    for (const auto& alignPtr : hapAligns)
+    {
+        for (auto nodeIndex = 0; nodeIndex != static_cast<int>(alignPtr->path().numNodes()); ++nodeIndex)
+        {
+            auto node = alignPtr->getNodeIdByIndex(nodeIndex);
+            if (targetNode != node)
+            {
+                continue;
+            }
+
+            numMatches += static_cast<int>(alignPtr->alignments()[nodeIndex].numMatched());
+        }
+    }
+
+    return numMatches;
+}
+
+static void getAlleleDepth(
+    const LocusSpecification& locusSpec, const GraphPath& hapPath, const vector<GraphAlignPtr>& hapAligns,
+    map<string, vector<double>>* alleleDepths)
 {
     for (const auto& variantSpec : locusSpec.variantSpecs())
     {
         assert(variantSpec.nodes().size() == 1);
         const auto strNode = variantSpec.nodes().front();
-
-        const int strSize = static_cast<int>(std::count(hapPath.nodeIds().begin(), hapPath.nodeIds().end(), strNode));
-
-        std::cerr << variantSpec.id() << " " << strNode << " " << strSize << std::endl;
-        for (const auto& alignPtr : hapAligns)
-        {
-            for (auto nodeIndex = 0; nodeIndex != static_cast<int>(alignPtr->path().numNodes()); ++nodeIndex)
-            {
-                auto node = alignPtr->getNodeIdByIndex(nodeIndex);
-                if (node != strNode)
-                {
-                    continue;
-                }
-
-                std::cerr << alignPtr->alignments()[nodeIndex] << std::endl;
-            }
-        }
+        int strLen = static_cast<int>(std::count(hapPath.nodeIds().begin(), hapPath.nodeIds().end(), strNode));
+        strLen *= static_cast<int>(locusSpec.regionGraph().nodeSeq(strNode).length());
+        const int numMatches = getTotalMatchesToNode(strNode, hapAligns);
+        const double depth = strLen > 0 ? numMatches / static_cast<double>(strLen) : 0.0;
+        (*alleleDepths)[variantSpec.id()].push_back(depth);
     }
 }
 
-void getMetrics(
+static map<string, vector<double>> getAlleleDepths(
     const LocusSpecification& locusSpec, const GraphPaths& paths, const FragById& fragById,
     const FragAssignment& fragAssignment, const FragPathAlignsById& fragPathAlignsById)
 {
+    map<string, vector<double>> alleleDepths;
+
     for (int hapIndex = 0; hapIndex != paths.size(); ++hapIndex)
     {
         vector<GraphAlignPtr> hapAligns;
@@ -72,6 +90,50 @@ void getMetrics(
                 hapAligns.push_back(fragPathAlign.mateAlign.align);
             }
         }
-        getAlleleDepth(locusSpec, paths[hapIndex], hapAligns);
+        getAlleleDepth(locusSpec, paths[hapIndex], hapAligns, &alleleDepths);
     }
+
+    return alleleDepths;
+}
+
+static string encodeDepths(const vector<double>& depths)
+{
+    std::ostringstream encoding;
+    encoding.precision(2);
+    encoding << std::fixed;
+
+    for (auto depth : depths)
+    {
+        if (encoding.tellp())
+        {
+            encoding << "/";
+        }
+        encoding << depth;
+    }
+
+    return encoding.str();
+}
+
+void getMetrics(
+    const LocusSpecification& locusSpec, const GraphPaths& paths, const FragById& fragById,
+    const FragAssignment& fragAssignment, const FragPathAlignsById& fragPathAlignsById, const string& outputPrefix)
+{
+    const auto alleleDepths = getAlleleDepths(locusSpec, paths, fragById, fragAssignment, fragPathAlignsById);
+
+    const string alleleDepthsPath = outputPrefix + ".allele_depth.tsv";
+    ofstream alleleDepthsFile(alleleDepthsPath);
+    if (alleleDepthsFile.is_open())
+    {
+        alleleDepthsFile << "VariantId\tAlleleDepths" << std::endl;
+        for (const auto& variantSpec : locusSpec.variantSpecs())
+        {
+            const auto depthsEncoding = encodeDepths(alleleDepths.at(variantSpec.id()));
+            alleleDepthsFile << variantSpec.id() << "\t" << depthsEncoding << std::endl;
+        }
+    }
+    else
+    {
+        throw std::runtime_error("Unable to open " + alleleDepthsPath);
+    }
+    alleleDepthsFile.close();
 }

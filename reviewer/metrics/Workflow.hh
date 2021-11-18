@@ -20,9 +20,12 @@
 
 #pragma once
 
+#include <string>
+
 #include "core/Aligns.hh"
 #include "core/LocusSpecification.hh"
 
 void getMetrics(
     const LocusSpecification& locusSpec, const GraphPaths& paths, const FragById& fragById,
-    const FragAssignment& fragAssignment, const FragPathAlignsById& fragPathAlignsById);
+    const FragAssignment& fragAssignment, const FragPathAlignsById& fragPathAlignsById,
+    const std::string& outputPrefix);

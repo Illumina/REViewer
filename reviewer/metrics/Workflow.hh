@@ -21,7 +21,8 @@
 #pragma once
 
 #include "core/Aligns.hh"
+#include "core/LocusSpecification.hh"
 
 void getMetrics(
-    const GraphPaths& paths, const FragById& fragById, const FragAssignment& fragAssignment,
-    const FragPathAlignsById& fragPathAlignsById);
+    const LocusSpecification& locusSpec, const GraphPaths& paths, const FragById& fragById,
+    const FragAssignment& fragAssignment, const FragPathAlignsById& fragPathAlignsById);

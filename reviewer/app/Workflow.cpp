@@ -33,6 +33,7 @@
 #include "app/Origin.hh"
 #include "app/Phasing.hh"
 #include "app/Projection.hh"
+#include "metrics/Workflow.hh"
 
 using boost::optional;
 using graphtools::GraphAlignment;
@@ -73,6 +74,9 @@ void visualizeLocus(
     spdlog::info("Assigning fragment origins");
     auto fragAssignment = getBestFragAssignment(diplotypePaths, fragPathAlignsById);
     spdlog::info("Found assignments for {} frags", fragAssignment.fragIds.size());
+
+    spdlog::info("Generating metrics");
+    getMetrics(locusSpec, diplotypePaths, fragById, fragAssignment, fragPathAlignsById);
 
     spdlog::info("Generating plot blueprint");
     auto lanePlots = generateBlueprint(diplotypePaths, fragById, fragAssignment, fragPathAlignsById);

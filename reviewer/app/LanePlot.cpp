@@ -201,9 +201,17 @@ getFeature(const ColorPicker& colorPicker, NodeId node, const Operation& op, con
     optional<Feature> feature;
     const string fill = colorPicker.getReadColor(node);
     const int opLength = op.length();
+    const string atcg = "ATCG";
     if (op.type() == OperationType::kMatch)
     {
-        feature = Feature(FeatureType::kRect, opLength, fill, "none");
+        for (string::size_type i; i < query.size(); i++)
+        {
+            feature = Feature(FeatureType::kRect, 1, fill, "none");
+            if (atcg.find(ref[i]) != string::npos)
+            {
+                feature->label = string(ref[i], 1);
+            }
+        }
     }
     else if (op.type() == OperationType::kMismatch)
     {

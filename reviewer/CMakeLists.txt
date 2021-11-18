@@ -20,7 +20,7 @@ find_package(LibLZMA REQUIRED)
 find_package(CURL REQUIRED)
 find_package(Catch2 REQUIRED)
 find_package(Threads REQUIRED)
-#find_package(fmt REQUIRED)
+find_package(fmt REQUIRED)
 find_library(htslib libhts.a)
 find_library(htslib hts)
 
@@ -88,8 +88,8 @@ target_link_libraries(REViewer PUBLIC
         ${CURL_LIBRARIES}
         ZLIB::ZLIB
         BZip2::BZip2
-        Threads::Threads)
-#fmt::fmt)
+        Threads::Threads
+        fmt::fmt)
 
 
 install(TARGETS REViewer RUNTIME DESTINATION bin)

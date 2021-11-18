@@ -31,9 +31,9 @@
 #include "graphcore/Graph.hh"
 #include "thirdparty/json/json.hpp"
 
-#include "app/GenomicRegion.hh"
-#include "app/Reference.hh"
-#include "app/VariantSpecification.hh"
+#include "core/GenomicRegion.hh"
+#include "core/Reference.hh"
+#include "core/VariantSpecification.hh"
 
 using RegionId = std::string;
 using NodeToRegionAssociation = std::unordered_map<graphtools::NodeId, GenomicRegion>;

@@ -31,8 +31,8 @@
 #include "graphcore/Path.hh"
 
 #include "app/Aligns.hh"
-#include "app/GenomicRegion.hh"
 #include "app/Origin.hh"
+#include "core/GenomicRegion.hh"
 
 enum class FeatureType
 {

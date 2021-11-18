@@ -20,21 +20,26 @@ find_package(LibLZMA REQUIRED)
 find_package(CURL REQUIRED)
 find_package(Catch2 REQUIRED)
 find_package(Threads REQUIRED)
-find_package(fmt REQUIRED)
+#find_package(fmt REQUIRED)
 find_library(htslib libhts.a)
 find_library(htslib hts)
 
 add_subdirectory(thirdparty/graph-tools)
 
 add_library(Core
-        core/Aligns.hh core/Aligns.cpp)
-
+        core/Aligns.hh core/Aligns.cpp
+        core/LocusSpecification.hh core/LocusSpecification.cpp
+        core/VariantSpecification.hh core/VariantSpecification.cpp
+        core/ReferenceContigInfo.hh core/ReferenceContigInfo.cpp
+        core/Reference.hh core/Reference.cpp
+        core/GenomicRegion.hh core/GenomicRegion.cpp
+        )
 target_link_libraries(Core PUBLIC
         graphtools
         ${Boost_LIBRARIES})
-
 target_include_directories(Core PUBLIC
         ${Boost_INCLUDE_DIRS}
+        ${CMAKE_SOURCE_DIR}
         )
 
 add_library(SnpCalling
@@ -42,15 +47,15 @@ add_library(SnpCalling
 target_include_directories(SnpCalling PUBLIC ${CMAKE_SOURCE_DIR})
 target_link_libraries(SnpCalling PUBLIC Core)
 
+add_library(Metrics
+        metrics/Workflow.hh metrics/Workflow.cpp)
+target_include_directories(Metrics PUBLIC ${CMAKE_SOURCE_DIR})
+target_link_libraries(Metrics PUBLIC Core)
+
 add_executable(REViewer
         app/REViewer.cpp
         app/Workflow.cpp app/Workflow.hh
         app/CatalogLoading.hh app/CatalogLoading.cpp
-        app/ReferenceContigInfo.hh app/ReferenceContigInfo.cpp
-        app/Reference.hh app/Reference.cpp
-        app/GenomicRegion.hh app/GenomicRegion.cpp
-        app/LocusSpecification.hh app/LocusSpecification.cpp
-        app/VariantSpecification.hh app/VariantSpecification.cpp
         app/LocusSpecDecoding.hh app/LocusSpecDecoding.cpp
         app/RegionGraph.hh app/RegionGraph.cpp
         app/GraphBlueprint.hh app/GraphBlueprint.cpp
@@ -76,14 +81,15 @@ endif ()
 
 target_link_libraries(REViewer PUBLIC
         Core
+        Metrics
         ${STATIC_FLAGS}
         ${htslib}
         ${LIBLZMA_LIBRARIES}
         ${CURL_LIBRARIES}
         ZLIB::ZLIB
         BZip2::BZip2
-        Threads::Threads
-        fmt::fmt)
+        Threads::Threads)
+#fmt::fmt)
 
 
 install(TARGETS REViewer RUNTIME DESTINATION bin)

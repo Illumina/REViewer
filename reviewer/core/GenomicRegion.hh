@@ -25,7 +25,7 @@
 #include <unordered_map>
 #include <vector>
 
-#include "app/ReferenceContigInfo.hh"
+#include "core/ReferenceContigInfo.hh"
 
 // Represents a contiguous region of a genome using 0-based half-open coordinates
 class GenomicRegion

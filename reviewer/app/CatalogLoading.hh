@@ -23,8 +23,8 @@
 #include <map>
 #include <string>
 
-#include "LocusSpecification.hh"
-#include "Reference.hh"
+#include "core/LocusSpecification.hh"
+#include "core/Reference.hh"
 
 using RegionCatalog = std::map<std::string, LocusSpecification>;
 RegionCatalog loadLocusCatalogFromDisk(const std::string& catalogPath, const Reference& reference, int flankLength);

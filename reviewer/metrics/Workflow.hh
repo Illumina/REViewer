@@ -20,12 +20,8 @@
 
 #pragma once
 
-#include <map>
-#include <memory>
-#include <string>
-
 #include "core/Aligns.hh"
 
-#include "core/LocusSpecification.hh"
-
-FragById getAligns(const std::string& readsPath, const std::string& referencePath, const LocusSpecification& locusSpec);
+void getMetrics(
+    const GraphPaths& paths, const FragById& fragById, const FragAssignment& fragAssignment,
+    const FragPathAlignsById& fragPathAlignsById);

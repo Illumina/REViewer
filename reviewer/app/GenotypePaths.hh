@@ -25,7 +25,7 @@
 
 #include "graphcore/Path.hh"
 
-#include "app/LocusSpecification.hh"
+#include "core/LocusSpecification.hh"
 
 using DiplotypePaths = std::vector<graphtools::Path>;
 

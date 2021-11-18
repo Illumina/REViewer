@@ -25,9 +25,9 @@
 
 #include "boost/optional.hpp"
 
-#include "app/GenomicRegion.hh"
-#include "app/LocusSpecification.hh"
-#include "app/Reference.hh"
+#include "core/GenomicRegion.hh"
+#include "core/LocusSpecification.hh"
+#include "core/Reference.hh"
 
 enum class VariantTypeFromUser
 {

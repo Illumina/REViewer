@@ -52,10 +52,11 @@ static int getTotalMatchesToNode(NodeId targetNode, const vector<GraphAlignPtr>&
     return numMatches;
 }
 
-static void getAlleleDepth(
-    const LocusSpecification& locusSpec, const GraphPath& hapPath, const vector<GraphAlignPtr>& hapAligns,
-    map<string, vector<double>>* alleleDepths)
+static map<string, double>
+getAlleleDepths(const LocusSpecification& locusSpec, const GraphPath& hapPath, const vector<GraphAlignPtr>& hapAligns)
 {
+    map<string, double> alleleDepths;
+
     for (const auto& variantSpec : locusSpec.variantSpecs())
     {
         assert(variantSpec.nodes().size() == 1);
@@ -64,15 +65,17 @@ static void getAlleleDepth(
         strLen *= static_cast<int>(locusSpec.regionGraph().nodeSeq(strNode).length());
         const int numMatches = getTotalMatchesToNode(strNode, hapAligns);
         const double depth = strLen > 0 ? numMatches / static_cast<double>(strLen) : 0.0;
-        (*alleleDepths)[variantSpec.id()].push_back(depth);
+        alleleDepths[variantSpec.id()] = depth;
     }
+
+    return alleleDepths;
 }
 
-static map<string, vector<double>> getAlleleDepths(
+static map<string, vector<double>> getGenotypeDepths(
     const LocusSpecification& locusSpec, const GraphPaths& paths, const FragById& fragById,
     const FragAssignment& fragAssignment, const FragPathAlignsById& fragPathAlignsById)
 {
-    map<string, vector<double>> alleleDepths;
+    map<string, vector<double>> genotypeDepths;
 
     for (int hapIndex = 0; hapIndex != paths.size(); ++hapIndex)
     {
@@ -90,10 +93,17 @@ static map<string, vector<double>> getAlleleDepths(
                 hapAligns.push_back(fragPathAlign.mateAlign.align);
             }
         }
-        getAlleleDepth(locusSpec, paths[hapIndex], hapAligns, &alleleDepths);
+
+        auto alleleDepths = getAlleleDepths(locusSpec, paths[hapIndex], hapAligns);
+        for (const auto& variantAndDepth : alleleDepths)
+        {
+            const auto& variant = variantAndDepth.first;
+            const auto depth = variantAndDepth.second;
+            genotypeDepths[variant].push_back(depth);
+        }
     }
 
-    return alleleDepths;
+    return genotypeDepths;
 }
 
 static string encodeDepths(const vector<double>& depths)
@@ -118,7 +128,7 @@ void getMetrics(
     const LocusSpecification& locusSpec, const GraphPaths& paths, const FragById& fragById,
     const FragAssignment& fragAssignment, const FragPathAlignsById& fragPathAlignsById, const string& outputPrefix)
 {
-    const auto alleleDepths = getAlleleDepths(locusSpec, paths, fragById, fragAssignment, fragPathAlignsById);
+    const auto genotypeDepths = getGenotypeDepths(locusSpec, paths, fragById, fragAssignment, fragPathAlignsById);
 
     const string alleleDepthsPath = outputPrefix + ".allele_depth.tsv";
     ofstream alleleDepthsFile(alleleDepthsPath);
@@ -127,7 +137,7 @@ void getMetrics(
         alleleDepthsFile << "VariantId\tAlleleDepths" << std::endl;
         for (const auto& variantSpec : locusSpec.variantSpecs())
         {
-            const auto depthsEncoding = encodeDepths(alleleDepths.at(variantSpec.id()));
+            const auto depthsEncoding = encodeDepths(genotypeDepths.at(variantSpec.id()));
             alleleDepthsFile << variantSpec.id() << "\t" << depthsEncoding << std::endl;
         }
     }

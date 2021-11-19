@@ -32,7 +32,7 @@
 #include "spdlog/spdlog.h"
 #include "thirdparty/json/json.hpp"
 
-#include "app/Reference.hh"
+#include "core/Reference.hh"
 
 using boost::optional;
 using graphtools::NodeId;

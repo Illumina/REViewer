@@ -18,7 +18,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-#include "app/VariantSpecification.hh"
+#include "core/VariantSpecification.hh"
 
 #include <sstream>
 

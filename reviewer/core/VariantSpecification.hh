@@ -29,7 +29,7 @@
 
 #include "graphcore/Graph.hh"
 
-#include "app/GenomicRegion.hh"
+#include "core/GenomicRegion.hh"
 
 enum class VariantType
 {

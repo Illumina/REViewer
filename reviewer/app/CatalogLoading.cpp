@@ -35,7 +35,7 @@
 #include "thirdparty/json/json.hpp"
 
 #include "app/LocusSpecDecoding.hh"
-#include "app/Reference.hh"
+#include "core/Reference.hh"
 
 using boost::optional;
 using graphtools::NodeId;

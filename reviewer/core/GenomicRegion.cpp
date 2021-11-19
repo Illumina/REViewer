@@ -18,7 +18,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-#include "app/GenomicRegion.hh"
+#include "core/GenomicRegion.hh"
 
 #include <limits>
 #include <sstream>

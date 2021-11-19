@@ -26,9 +26,9 @@
 #include "graphcore/Path.hh"
 
 #include "app/FragLenFilter.hh"
-#include "app/GenomicRegion.hh"
 #include "app/Origin.hh"
 #include "app/Projection.hh"
+#include "core/GenomicRegion.hh"
 
 FragAssignment
 getBestFragAssignment(const std::vector<graphtools::Path>& hapPaths, const FragPathAlignsById& fragPathAlignsById);

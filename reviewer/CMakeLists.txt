@@ -82,6 +82,7 @@ endif ()
 target_link_libraries(REViewer PUBLIC
         Core
         Metrics
+        SnpCalling
         ${STATIC_FLAGS}
         ${htslib}
         ${LIBLZMA_LIBRARIES}

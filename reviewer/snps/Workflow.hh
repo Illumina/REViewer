@@ -33,8 +33,8 @@ public:
     bool operator==(const SnpCalls& other) const { return true; }
 };
 
-SnpCalls callSnps(
-    GraphPaths paths, const FragById& fragById, const FragAssignment& fragAssignment,
+void callSnps(
+    const GraphPaths& paths, const FragById& fragById, const FragAssignment& fragAssignment,
     const FragPathAlignsById& fragPathAlignsById);
 
 }

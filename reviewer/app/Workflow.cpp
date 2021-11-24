@@ -34,6 +34,7 @@
 #include "app/Phasing.hh"
 #include "app/Projection.hh"
 #include "metrics/Workflow.hh"
+#include "snps/Workflow.hh"
 
 using boost::optional;
 using graphtools::GraphAlignment;
@@ -83,6 +84,9 @@ static void analyzeLocus(
 
     spdlog::info("Generating metrics");
     getMetrics(locusSpec, diplotypePaths, fragById, fragAssignment, fragPathAlignsById, outputPrefix);
+
+    spdlog::info("Calling SNPs");
+    snps::callSnps(diplotypePaths, fragById, fragAssignment, fragPathAlignsById);
 
     spdlog::info("Generating plot blueprint");
     auto lanePlots = generateBlueprint(diplotypePaths, fragById, fragAssignment, fragPathAlignsById);

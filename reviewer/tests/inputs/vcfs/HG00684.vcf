@@ -16,41 +16,12 @@
 ##FORMAT=<ID=REPCI,Number=1,Type=String,Description="Confidence interval for REPCN">
 ##FORMAT=<ID=REPCN,Number=1,Type=String,Description="Number of repeat units spanned by the allele">
 ##FORMAT=<ID=SO,Number=1,Type=String,Description="Type of reads that support the allele; can be SPANNING, FLANKING, or INREPEAT meaning that the reads span, flank, or are fully contained in the repeat">
-##ALT=<ID=STR1,Description="Allele comprised of 1 repeat units">
-##ALT=<ID=STR10,Description="Allele comprised of 10 repeat units">
-##ALT=<ID=STR11,Description="Allele comprised of 11 repeat units">
 ##ALT=<ID=STR12,Description="Allele comprised of 12 repeat units">
-##ALT=<ID=STR13,Description="Allele comprised of 13 repeat units">
-##ALT=<ID=STR14,Description="Allele comprised of 14 repeat units">
-##ALT=<ID=STR15,Description="Allele comprised of 15 repeat units">
-##ALT=<ID=STR16,Description="Allele comprised of 16 repeat units">
 ##ALT=<ID=STR17,Description="Allele comprised of 17 repeat units">
-##ALT=<ID=STR18,Description="Allele comprised of 18 repeat units">
-##ALT=<ID=STR19,Description="Allele comprised of 19 repeat units">
-##ALT=<ID=STR2,Description="Allele comprised of 2 repeat units">
-##ALT=<ID=STR20,Description="Allele comprised of 20 repeat units">
-##ALT=<ID=STR21,Description="Allele comprised of 21 repeat units">
-##ALT=<ID=STR22,Description="Allele comprised of 22 repeat units">
-##ALT=<ID=STR23,Description="Allele comprised of 23 repeat units">
-##ALT=<ID=STR24,Description="Allele comprised of 24 repeat units">
-##ALT=<ID=STR25,Description="Allele comprised of 25 repeat units">
-##ALT=<ID=STR27,Description="Allele comprised of 27 repeat units">
 ##ALT=<ID=STR28,Description="Allele comprised of 28 repeat units">
-##ALT=<ID=STR3,Description="Allele comprised of 3 repeat units">
-##ALT=<ID=STR30,Description="Allele comprised of 30 repeat units">
-##ALT=<ID=STR31,Description="Allele comprised of 31 repeat units">
-##ALT=<ID=STR36,Description="Allele comprised of 36 repeat units">
-##ALT=<ID=STR51,Description="Allele comprised of 51 repeat units">
-##ALT=<ID=STR52,Description="Allele comprised of 52 repeat units">
-##ALT=<ID=STR59,Description="Allele comprised of 59 repeat units">
-##ALT=<ID=STR6,Description="Allele comprised of 6 repeat units">
-##ALT=<ID=STR63,Description="Allele comprised of 63 repeat units">
-##ALT=<ID=STR7,Description="Allele comprised of 7 repeat units">
-##ALT=<ID=STR73,Description="Allele comprised of 73 repeat units">
-##ALT=<ID=STR9,Description="Allele comprised of 9 repeat units">
-#CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO	FORMAT	HG00684
-chr16	17470908	.	G	<STR17>,<STR52>	.	PASS	END=17470921;REF=4;RL=13;RU=GGC;VARID=XYLT1;REPID=XYLT1	GT:SO:REPCN:REPCI:ADSP:ADFL:ADIR:LC	1/2:SPANNING/INREPEAT:17/52:17-17/48-70:7/0:9/22:0/1:37.216216
-chr16	24613438	.	C	<STR11>,<STR12>	.	PASS	END=24613532;REF=18;RL=94;RU=TTTTA;VARID=TNRC6A;REPID=TNRC6A	GT:SO:REPCN:REPCI:ADSP:ADFL:ADIR:LC	1/2:SPANNING/SPANNING:11/12:11-11/12-12:8/21:33/35:0/0:40.945946
-chr16	66490398	.	A	<STR1>	.	PASS	END=66490458;REF=12;RL=60;RU=TGGAA;VARID=BEAN1_chr16:66490398-66490458;REPID=BEAN1_chr16:66490398-66490458	GT:SO:REPCN:REPCI:ADSP:ADFL:ADIR:LC	1/1:FLANKING/FLANKING:1/1:0-503/0-661:0/0:1/1:0/0:36.081081
-chr16	66490399	.	T	<STR14>	.	PASS	END=66490453;REF=10;RL=54;RU=TAAAA;VARID=BEAN1_chr16:66490399-66490453;REPID=BEAN1_chr16:66490399-66490453	GT:SO:REPCN:REPCI:ADSP:ADFL:ADIR:LC	1/1:SPANNING/SPANNING:14/14:14-14/14-14:18/18:37/37:0/0:36.081081
-chr16	87604287	.	C	.	.	PASS	END=87604329;REF=14;RL=42;RU=CTG;VARID=JPH3;REPID=JPH3	GT:SO:REPCN:REPCI:ADSP:ADFL:ADIR:LC	0/0:SPANNING/SPANNING:14/14:14-14/14-14:29/29:22/22:0/0:32.432432
+##ALT=<ID=STR46,Description="Allele comprised of 46 repeat units">
+#CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO	FORMAT	HG00684_chr16
+chr16	17470908	.	G	<STR28>,<STR46>	.	PASS	END=17470921;REF=4;RL=13;RU=GGC;VARID=XYLT1;REPID=XYLT1	GT:SO:REPCN:REPCI:ADSP:ADFL:ADIR:LC	1/2:SPANNING/SPANNING:28/46:28-28/44-56:8/1:4/16:0/0:35.918919
+chr16	24613438	.	C	<STR12>	.	PASS	END=24613532;REF=18;RL=94;RU=TTTTA;VARID=TNRC6A;REPID=TNRC6A	GT:SO:REPCN:REPCI:ADSP:ADFL:ADIR:LC	1/1:SPANNING/SPANNING:12/12:12-12/12-12:15/15:33/33:0/0:36.162162
+chr16	66490399	.	T	<STR17>	.	PASS	END=66490466;REF=13;RL=67;RU=TRRAA;VARID=BEAN1;REPID=BEAN1	GT:SO:REPCN:REPCI:ADSP:ADFL:ADIR:LC	1/1:SPANNING/SPANNING:17/17:17-17/17-17:7/7:36/36:0/0:34.459459
+chr16	87604287	.	C	.	.	PASS	END=87604329;REF=14;RL=42;RU=CTG;VARID=JPH3;REPID=JPH3	GT:SO:REPCN:REPCI:ADSP:ADFL:ADIR:LC	0/0:SPANNING/SPANNING:14/14:14-14/14-14:19/19:30/30:0/0:41.108108

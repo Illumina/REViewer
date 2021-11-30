@@ -21,8 +21,16 @@ def main():
   }
   .column {
     float: left;
+    position: relative;
     width: 50%;
+    height: auto;
     padding: 10px;
+  }
+  .row {
+    border: 1px solid gray;
+    height: auto; 
+    position: relative;
+    overflow: hidden;
   }
   </style>
   <body>''')
@@ -31,7 +39,7 @@ def main():
             sample_id = image_filename.split(".")[0]
             if not os.path.exists(os.path.join(frozen_output_dir, image_filename)):
                 raise ValueError(f"No matching frozen result for test output {image_filename}")
-            html_file.write('<div style="border: 10x solid red;">')
+            html_file.write('<div class="row">')
 
             # New result
             html_file.write('<div class="column">')
@@ -45,7 +53,7 @@ def main():
             html_file.write(f'\n<img src="{os.path.join(frozen_output_dir, image_filename)}"/>')
             html_file.write("</div>")
 
-            html_file.write("<div>")
+            html_file.write("</div>")
         html_file.write("</body>")
         html_file.write("</html>")
 if __name__ == "__main__":

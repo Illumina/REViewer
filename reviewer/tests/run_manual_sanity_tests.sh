@@ -1,11 +1,22 @@
 #!/bin/bash
 TEST_OUTPUTS=sanity_test_outputs.html
 
+chr16_genome=inputs/genomes/HG38_chr16.fa 
+
+if [ ! -f ${chr16_genome} ]; then 
+  curl https://hgdownload.soe.ucsc.edu/goldenPath/hg38/chromosomes/chr16.fa.gz | gunzip > ${chr16_genome}
+fi
+
 for bamlet_file in inputs/bamlets/*.bam; do
   filename=$(basename -- ${bamlet_file})
   basename=${filename%.bam}
   locus=${basename%_*}
   sample=${basename#*_}
+  baifile=${bamlet_file}.bai 
+
+  if [ ! -f ${baifile} ]; then 
+    samtools index ${bamlet_file}
+  fi
 
   echo "Running REViewer on ${bamlet_file}"
   reviewer \

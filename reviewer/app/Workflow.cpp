@@ -47,6 +47,7 @@ void visualizeLocus(
     const LocusSpecification& locusSpec, const string& svgPath, const optional<string>& phasingInfoPath)
 {
     spdlog::info("Loading specification of locus {}", locusId);
+    spdlog::info("Made an edit.");
 
     auto fragById = getAligns(readsPath, referencePath, locusSpec);
     spdlog::info("Extracted {} frags", fragById.size());

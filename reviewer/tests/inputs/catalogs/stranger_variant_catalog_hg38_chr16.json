@@ -9,7 +9,7 @@
         "Source": "PubMed",
         "SourceId": "19878914",
         "LocusStructure": "(TRRAA)*",
-        "ReferenceRegion": ["chr16:66490398-66490458"],
+        "ReferenceRegion": ["chr16:66490399-66490466"],
         "VariantType": ["Repeat"],
         "VariantID": ["BEAN1_TRRAA"],
         "Disease": "SCA31",

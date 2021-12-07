@@ -20,6 +20,7 @@
 
 #include "app/LanePlot.hh"
 
+#include <stdexcept>
 #include <tuple>
 
 #include <boost/optional.hpp>
@@ -493,6 +494,10 @@ vector<LanePlot> generateBlueprint(
     auto infoByRead = extractReadInfo(fragAssignment, fragById, fragPathAlignsById);
     removeFlankingReads(infoByRead);
     clipFlanks(paths, 50, infoByRead);
+    if (infoByRead.empty())
+    {
+        throw std::runtime_error("There are no read alignments in the target region");
+    }
     vector<LanePlot> lanePlots;
     for (int pathIndex = 0; pathIndex != paths.size(); ++pathIndex)
     {

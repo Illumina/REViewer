@@ -22,6 +22,8 @@
 
 #include "graphalign/GraphAlignment.hh"
 
+#include <cassert>
+
 using GraphPath = graphtools::Path;
 using GraphPaths = std::vector<GraphPath>;
 

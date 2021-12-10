@@ -45,9 +45,8 @@ static map<string, Genotype> getGenotypes(const LocusSpecification& locusSpec, c
         const auto strNode = variantSpec.nodes().front();
 
         Genotype genotype;
-        for (int hapIndex = 0; hapIndex != hapPaths.size(); ++hapIndex)
+        for (const auto& hapPath : hapPaths)
         {
-            const auto& hapPath = hapPaths[hapIndex];
             const int strLen = std::count(hapPath.nodeIds().begin(), hapPath.nodeIds().end(), strNode);
             genotype.push_back(strLen);
         }

@@ -33,7 +33,7 @@
 #include "app/Origin.hh"
 #include "app/Phasing.hh"
 #include "app/Projection.hh"
-#include "metrics/Workflow.hh"
+#include "metrics/Metrics.hh"
 
 using boost::optional;
 using graphtools::GraphAlignment;

@@ -48,7 +48,7 @@ target_include_directories(SnpCalling PUBLIC ${CMAKE_SOURCE_DIR})
 target_link_libraries(SnpCalling PUBLIC Core)
 
 add_library(Metrics
-        metrics/Workflow.hh metrics/Workflow.cpp)
+        metrics/Metrics.hh metrics/Metrics.cpp)
 target_include_directories(Metrics PUBLIC ${CMAKE_SOURCE_DIR})
 target_link_libraries(Metrics PUBLIC Core)
 

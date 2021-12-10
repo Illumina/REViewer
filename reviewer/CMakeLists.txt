@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.7)
-project(REViewer VERSION 0.2.6 LANGUAGES CXX)
+project(REViewer VERSION 0.2.7 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -48,7 +48,7 @@ target_include_directories(SnpCalling PUBLIC ${CMAKE_SOURCE_DIR})
 target_link_libraries(SnpCalling PUBLIC Core)
 
 add_library(Metrics
-        metrics/Workflow.hh metrics/Workflow.cpp)
+        metrics/Metrics.hh metrics/Metrics.cpp)
 target_include_directories(Metrics PUBLIC ${CMAKE_SOURCE_DIR})
 target_link_libraries(Metrics PUBLIC Core)
 

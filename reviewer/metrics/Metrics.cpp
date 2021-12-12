@@ -21,12 +21,9 @@
 #include "metrics/Metrics.hh"
 
 #include <algorithm>
-#include <fstream>
 #include <map>
 #include <sstream>
 #include <vector>
-
-#include "thirdparty/json/json.hpp"
 
 using graphtools::NodeId;
 using std::map;
@@ -148,33 +145,26 @@ template <typename T> static string encode(const vector<T>& depths)
     return encoding.str();
 }
 
-void getMetrics(
+MetricsByVariant getMetrics(
     const LocusSpecification& locusSpec, const GraphPaths& paths, const FragById& fragById,
-    const FragAssignment& fragAssignment, const FragPathAlignsById& fragPathAlignsById, const string& outputPrefix)
+    const FragAssignment& fragAssignment, const FragPathAlignsById& fragPathAlignsById)
 {
+    MetricsByVariant metricsByVariant;
     const auto genotypes = getGenotypes(locusSpec, paths);
     const auto genotypeDepths = getGenotypeDepths(locusSpec, paths, fragById, fragAssignment, fragPathAlignsById);
 
-    const string alleleDepthsPath = outputPrefix + ".metrics.json";
-
-    nlohmann::json metricsReport;
     for (const auto& variantSpec : locusSpec.variantSpecs())
     {
         const auto genotypeEncoding = encode(genotypes.at(variantSpec.id()));
         const auto depthsEncoding = encode(genotypeDepths.at(variantSpec.id()));
 
-        metricsReport[variantSpec.id()]["Genotype"] = genotypeEncoding;
-        metricsReport[variantSpec.id()]["AlleleDepths"] = depthsEncoding;
+        Metrics metrics;
+        metrics.variantId = variantSpec.id();
+        metrics.genotype = genotypeEncoding;
+        metrics.alleleDepth = depthsEncoding;
+
+        metricsByVariant.push_back(metrics);
     }
 
-    ofstream metricsFile(alleleDepthsPath);
-    if (metricsFile.is_open())
-    {
-        metricsFile << metricsReport.dump(4) << std::endl;
-    }
-    else
-    {
-        throw std::runtime_error("Unable to open " + alleleDepthsPath);
-    }
-    metricsFile.close();
+    return metricsByVariant;
 }

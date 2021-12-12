@@ -30,8 +30,7 @@ static int calcFragLen(const ReadPathAlign& readAlign, const ReadPathAlign& mate
     return std::max(readAlign.end, mateAlign.end) - std::min(readAlign.begin, mateAlign.begin);
 }
 
-FragPathAlignsById
-resolveByFragLen(int meanFragLen, const DiplotypePaths& paths, const PairPathAlignById& pairPathAlignById)
+FragPathAlignsById resolveByFragLen(int meanFragLen, const Diplotype& paths, const PairPathAlignById& pairPathAlignById)
 {
     FragPathAlignsById fragPathAlignsById;
 

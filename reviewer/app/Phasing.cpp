@@ -21,14 +21,10 @@
 #include "app/Phasing.hh"
 
 #include <algorithm>
-#include <fstream>
-#include <set>
-#include <utility>
 
 #include "app/Projection.hh"
 
 using boost::optional;
-using std::ofstream;
 using std::pair;
 using std::string;
 using std::vector;
@@ -61,117 +57,29 @@ int scorePath(int pathIndex, const PairPathAlignById& pairPathAlignById)
     return pathScore;
 }
 
-using ScoredGenotype = pair<DiplotypePaths, int>;
-
-string summarizePath(const graphtools::Graph& graph, const graphtools::Path& path)
+ScoredDiplotypes scoreDiplotypes(const FragById& fragById, const vector<Diplotype>& diplotypes)
 {
-    string summary;
-    std::set<graphtools::NodeId> observedNodes;
-    for (const auto nodeId : path.nodeIds())
+    vector<ScoredDiplotype> scoredDiplotypes;
+
+    for (const auto& diplotype : diplotypes)
     {
-        if (observedNodes.find(nodeId) != observedNodes.end())
-        {
-            continue;
-        }
+        assert(diplotype.size() == 1 || diplotype.size() == 2);
 
-        const bool isLoopNode = graph.hasEdge(nodeId, nodeId);
-
-        if (nodeId == 0)
-        {
-            summary += "(LF)";
-        }
-        else if (nodeId + 1 == graph.numNodes())
-        {
-            summary += "(RF)";
-        }
-        else
-        {
-            const string& nodeSeq = graph.nodeSeq(nodeId);
-            summary += "(" + nodeSeq + ")";
-
-            if (isLoopNode)
-            {
-                int numMotifs = std::count(path.nodeIds().begin(), path.nodeIds().end(), nodeId);
-                summary += "{" + std::to_string(numMotifs) + "}";
-            }
-        }
-
-        observedNodes.emplace(nodeId);
-    }
-
-    return summary;
-}
-
-void outputPhasingInfo(
-    const FragById& fragById, const vector<ScoredGenotype>& scoredGenotypes, const string& phasingInfoPath)
-{
-    using GenotypePathSet = std::set<graphtools::Path>;
-    assert(!fragById.empty());
-    const auto& firstFrag = fragById.begin()->second;
-    const graphtools::Graph& graph = *firstFrag.read.align.path().graphRawPtr();
-
-    ofstream phasingInfoFile(phasingInfoPath);
-    if (phasingInfoFile.is_open())
-    {
-        std::set<GenotypePathSet> observedGenotypes;
-        for (const auto& scoredGenotype : scoredGenotypes)
-        {
-            const auto& genotypePaths = scoredGenotype.first;
-            const int score = scoredGenotype.second;
-
-            GenotypePathSet genotypePathSet;
-            genotypePathSet.emplace(genotypePaths.front());
-            genotypePathSet.emplace(genotypePaths.back());
-            if (observedGenotypes.find(genotypePathSet) != observedGenotypes.end())
-            {
-                continue;
-            }
-
-            phasingInfoFile << summarizePath(graph, genotypePaths.front());
-            if (genotypePaths.size() == 2)
-            {
-                phasingInfoFile << "/" << summarizePath(graph, genotypePaths.back());
-            }
-            phasingInfoFile << "\t" << score << std::endl;
-            observedGenotypes.emplace(genotypePathSet);
-        }
-    }
-    else
-    {
-        throw std::runtime_error("Unable to open " + phasingInfoPath);
-    }
-}
-
-DiplotypePaths phase(
-    const FragById& fragGraphAlignById, const vector<DiplotypePaths>& pathsByGenotype,
-    const optional<string>& phasingInfoPath)
-{
-    vector<ScoredGenotype> scoredGenotypes;
-
-    for (const auto& genotypePaths : pathsByGenotype)
-    {
-        assert(genotypePaths.size() == 1 || genotypePaths.size() == 2);
-
-        auto pairPathAlignById = project(genotypePaths, fragGraphAlignById);
+        auto pairPathAlignById = project(diplotype, fragById);
 
         int genotypeScore = scorePath(0, pairPathAlignById);
-        if (genotypePaths.size() == 2)
+        if (diplotype.size() == 2)
         {
             genotypeScore += scorePath(1, pairPathAlignById);
         }
 
-        scoredGenotypes.emplace_back(genotypePaths, genotypeScore);
+        scoredDiplotypes.emplace_back(diplotype, genotypeScore);
     }
 
     std::sort(
-        scoredGenotypes.begin(), scoredGenotypes.end(),
-        [](const ScoredGenotype& gt1, const ScoredGenotype& gt2) { return gt1.second > gt2.second; });
+        scoredDiplotypes.begin(), scoredDiplotypes.end(),
+        [](const ScoredDiplotype& gt1, const ScoredDiplotype& gt2) { return gt1.second > gt2.second; });
 
-    if (phasingInfoPath)
-    {
-        outputPhasingInfo(fragGraphAlignById, scoredGenotypes, *phasingInfoPath);
-    }
-
-    assert(!scoredGenotypes.empty());
-    return scoredGenotypes.front().first;
+    assert(!scoredDiplotypes.empty());
+    return scoredDiplotypes;
 }

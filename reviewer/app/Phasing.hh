@@ -23,11 +23,10 @@
 #include "app/Aligns.hh"
 #include "app/GenotypePaths.hh"
 
-#include <string>
+#include <utility>
 #include <vector>
 
-#include <boost/optional.hpp>
+using ScoredDiplotype = std::pair<Diplotype, int>;
+using ScoredDiplotypes = std::vector<ScoredDiplotype>;
 
-DiplotypePaths phase(
-    const FragById& fragById, const std::vector<DiplotypePaths>& pathsByGenotype,
-    const boost::optional<std::string>& phasingInfoPath);
+ScoredDiplotypes scoreDiplotypes(const FragById& fragById, const std::vector<Diplotype>& diplotypes);

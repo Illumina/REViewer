@@ -25,7 +25,15 @@
 #include "core/Aligns.hh"
 #include "core/LocusSpecification.hh"
 
-void getMetrics(
+struct Metrics
+{
+    std::string variantId = "NA";
+    std::string genotype = "NA";
+    std::string alleleDepth = "NA";
+};
+
+using MetricsByVariant = std::vector<Metrics>;
+
+MetricsByVariant getMetrics(
     const LocusSpecification& locusSpec, const GraphPaths& paths, const FragById& fragById,
-    const FragAssignment& fragAssignment, const FragPathAlignsById& fragPathAlignsById,
-    const std::string& outputPrefix);
+    const FragAssignment& fragAssignment, const FragPathAlignsById& fragPathAlignsById);

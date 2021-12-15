@@ -20,9 +20,13 @@
 
 #include "Workflow.hh"
 
+#include <fstream>
+#include <set>
+
 #include <boost/algorithm/string.hpp>
 
 #include "spdlog/spdlog.h"
+#include "thirdparty/json/json.hpp"
 
 #include "app/Aligns.hh"
 #include "app/CatalogLoading.hh"
@@ -36,16 +40,42 @@
 #include "metrics/Metrics.hh"
 
 using boost::optional;
+using graphtools::Graph;
 using graphtools::GraphAlignment;
 using graphtools::Operation;
 using graphtools::OperationType;
+using std::map;
+using std::ofstream;
 using std::string;
 using std::unordered_map;
 using std::vector;
 
-static void analyzeLocus(
+class LocusResults
+{
+public:
+    LocusResults(
+        const ScoredDiplotypes& scoredDiplotypes, vector<LanePlot> lanePlots, MetricsByVariant metricsByVariant)
+        : scoredDiplotypes_(std::move(scoredDiplotypes))
+        , lanePlots_(std::move(lanePlots))
+        , metricsByVariant_(std::move(metricsByVariant))
+    {
+    }
+
+    const ScoredDiplotypes& scoredDiplotypes() const { return scoredDiplotypes_; }
+    const vector<LanePlot>& lanePlots() const { return lanePlots_; }
+    const MetricsByVariant& metricsByVariant() const { return metricsByVariant_; }
+
+private:
+    ScoredDiplotypes scoredDiplotypes_;
+    vector<LanePlot> lanePlots_;
+    MetricsByVariant metricsByVariant_;
+};
+
+using ResultsByLocus = map<string, LocusResults>;
+
+static LocusResults analyzeLocus(
     const string& referencePath, const string& readsPath, const string& vcfPath, const string& locusId,
-    const LocusSpecification& locusSpec, const string& outputPrefix, bool outputPhasingInfo)
+    const LocusSpecification& locusSpec)
 {
     spdlog::info("Loading specification of locus {}", locusId);
 
@@ -60,35 +90,30 @@ static void analyzeLocus(
     auto pathsByDiplotype = getCandidateDiplotypePaths(meanFragLen, vcfPath, locusSpec);
 
     spdlog::info("Phasing");
-    optional<string> phasingInfoPath;
-    if (outputPhasingInfo)
-    {
-        phasingInfoPath = outputPrefix + ".phasing.txt";
-    }
 
-    auto diplotypePaths = phase(fragById, pathsByDiplotype, phasingInfoPath);
-    spdlog::info("Found {} paths defining diplotype", diplotypePaths.size());
+    auto scoredDiplotypes = scoreDiplotypes(fragById, pathsByDiplotype);
+    auto topDiplotype = scoredDiplotypes.front().first; // scoredDiplotypes are sorted
+    spdlog::info("Found {} paths defining diplotype", topDiplotype.size());
 
     spdlog::info("Projecting reads onto haplotype paths");
-    auto pairPathAlignById = project(diplotypePaths, fragById);
+    auto pairPathAlignById = project(topDiplotype, fragById);
     spdlog::info("Projected {} read pairs", pairPathAlignById.size());
 
     spdlog::info("Generating fragment alignments");
-    auto fragPathAlignsById = resolveByFragLen(meanFragLen, diplotypePaths, pairPathAlignById);
+    auto fragPathAlignsById = resolveByFragLen(meanFragLen, topDiplotype, pairPathAlignById);
     spdlog::info("Generated {} fragment alignments", fragPathAlignsById.size());
 
     spdlog::info("Assigning fragment origins");
-    auto fragAssignment = getBestFragAssignment(diplotypePaths, fragPathAlignsById);
+    auto fragAssignment = getBestFragAssignment(topDiplotype, fragPathAlignsById);
     spdlog::info("Found assignments for {} frags", fragAssignment.fragIds.size());
 
     spdlog::info("Generating metrics");
-    getMetrics(locusSpec, diplotypePaths, fragById, fragAssignment, fragPathAlignsById, outputPrefix);
+    auto metricsByVariant = getMetrics(locusSpec, topDiplotype, fragById, fragAssignment, fragPathAlignsById);
 
     spdlog::info("Generating plot blueprint");
-    auto lanePlots = generateBlueprint(diplotypePaths, fragById, fragAssignment, fragPathAlignsById);
+    auto lanePlots = generateBlueprint(topDiplotype, fragById, fragAssignment, fragPathAlignsById);
 
-    spdlog::info("Writing SVG image to disk");
-    generateSvg(lanePlots, outputPrefix + ".svg");
+    return { scoredDiplotypes, lanePlots, metricsByVariant };
 }
 
 vector<string> getLocusIds(const RegionCatalog& catalog, const string& encoding)
@@ -112,21 +137,137 @@ vector<string> getLocusIds(const RegionCatalog& catalog, const string& encoding)
     return locusIds;
 }
 
+static string summarizePath(const graphtools::Graph& graph, const graphtools::Path& path)
+{
+    string summary;
+    std::set<graphtools::NodeId> observedNodes;
+    for (const auto nodeId : path.nodeIds())
+    {
+        if (observedNodes.find(nodeId) != observedNodes.end())
+        {
+            continue;
+        }
+
+        const bool isLoopNode = graph.hasEdge(nodeId, nodeId);
+
+        if (nodeId == 0)
+        {
+            summary += "(LF)";
+        }
+        else if (nodeId + 1 == graph.numNodes())
+        {
+            summary += "(RF)";
+        }
+        else
+        {
+            assert(graph.numNodes() != 0);
+            const string& nodeSeq = graph.nodeSeq(nodeId);
+            summary += "(" + nodeSeq + ")";
+
+            if (isLoopNode)
+            {
+                int numMotifs = std::count(path.nodeIds().begin(), path.nodeIds().end(), nodeId);
+                summary += "{" + std::to_string(numMotifs) + "}";
+            }
+        }
+
+        observedNodes.emplace(nodeId);
+    }
+
+    return summary;
+}
+
+void outputPhasingInfo(const Graph& graph, const ScoredDiplotypes& scoredDiplotypes, const string& phasingInfoPath)
+{
+    using Diplotypes = std::set<graphtools::Path>;
+
+    ofstream phasingInfoFile(phasingInfoPath);
+    if (phasingInfoFile.is_open())
+    {
+        std::set<Diplotypes> observedGenotypes;
+        for (const auto& scoredGenotype : scoredDiplotypes)
+        {
+            const auto& genotypePaths = scoredGenotype.first;
+            const int score = scoredGenotype.second;
+
+            Diplotypes genotypePathSet;
+            genotypePathSet.emplace(genotypePaths.front());
+            genotypePathSet.emplace(genotypePaths.back());
+            if (observedGenotypes.find(genotypePathSet) != observedGenotypes.end())
+            {
+                continue;
+            }
+
+            phasingInfoFile << summarizePath(graph, genotypePaths.front());
+            if (genotypePaths.size() == 2)
+            {
+                phasingInfoFile << "/" << summarizePath(graph, genotypePaths.back());
+            }
+            phasingInfoFile << "\t" << score << std::endl;
+            observedGenotypes.emplace(genotypePathSet);
+        }
+    }
+    else
+    {
+        throw std::runtime_error("Unable to open " + phasingInfoPath);
+    }
+}
+
+void outputResults(
+    const RegionCatalog& locusCatalog, const ResultsByLocus& resultsByLocus, const string& outputPrefix,
+    bool phasingInfoNeeded)
+{
+    spdlog::info("Writing output to disk");
+    nlohmann::json metricsReport;
+    for (const auto& locusIdAndResults : resultsByLocus)
+    {
+        const auto& locusId = locusIdAndResults.first;
+        const auto& locusResults = locusIdAndResults.second;
+        const auto& locusSpec = locusCatalog.at(locusId);
+        const string locusOutputPrefix = outputPrefix + "." + locusId;
+        generateSvg(locusResults.lanePlots(), locusOutputPrefix + ".svg");
+        if (phasingInfoNeeded)
+        {
+            const auto phasingInfoPath = locusOutputPrefix + ".phasing.txt";
+            const Graph& graph = locusSpec.regionGraph();
+            outputPhasingInfo(graph, locusResults.scoredDiplotypes(), phasingInfoPath);
+        }
+
+        for (const auto& variantMetrics : locusResults.metricsByVariant())
+        {
+            metricsReport[variantMetrics.variantId]["Genotype"] = variantMetrics.genotype;
+            metricsReport[variantMetrics.variantId]["AlleleDepths"] = variantMetrics.alleleDepth;
+        }
+    }
+
+    const string metricsFilePath = outputPrefix + ".metrics.json";
+    ofstream metricsFile(metricsFilePath);
+    if (metricsFile.is_open())
+    {
+        metricsFile << metricsReport.dump(4) << std::endl;
+    }
+    else
+    {
+        throw std::runtime_error("Unable to open " + metricsFilePath);
+    }
+    metricsFile.close();
+}
+
 int runWorkflow(const WorkflowArguments& args)
 {
-    const int kFlankLength = 1000;
     Reference reference(args.referencePath);
     auto locusCatalog = loadLocusCatalogFromDisk(args.catalogPath, reference, args.locusExtensionLength);
 
+    ResultsByLocus resultsByLocus;
     auto locusIds = getLocusIds(locusCatalog, args.locusId);
     for (const auto& locusId : locusIds)
     {
-        const string locusOutputPrefix = args.outputPrefix + "." + locusId;
         auto locusSpec = locusCatalog.at(locusId);
-        analyzeLocus(
-            args.referencePath, args.readsPath, args.vcfPath, locusId, locusSpec, locusOutputPrefix,
-            args.outputPhasingInfo);
+        auto locusResults = analyzeLocus(args.referencePath, args.readsPath, args.vcfPath, locusId, locusSpec);
+        resultsByLocus.emplace(locusId, locusResults);
     }
+
+    outputResults(locusCatalog, resultsByLocus, args.outputPrefix, args.outputPhasingInfo);
 
     return 0;
 }

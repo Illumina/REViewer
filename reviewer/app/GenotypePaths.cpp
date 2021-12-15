@@ -202,7 +202,7 @@ static vector<NodeVectors> extendDiplotype(const vector<NodeVectors>& genotypes,
     return extendedGenotype;
 }
 
-vector<DiplotypePaths>
+vector<Diplotype>
 getCandidateDiplotypePaths(int meanFragLen, const string& vcfPath, const LocusSpecification& locusSpec)
 {
     auto genotypeNodesByNodeRange = getGenotypeNodesByNodeRange(meanFragLen, vcfPath, locusSpec);
@@ -235,12 +235,12 @@ getCandidateDiplotypePaths(int meanFragLen, const string& vcfPath, const LocusSp
         ++node;
     }
 
-    vector<DiplotypePaths> pathsByDiplotype;
+    vector<Diplotype> pathsByDiplotype;
     const NodeId rightFlankNode = locusSpec.regionGraph().numNodes() - 1;
     const int rightFlankLength = locusSpec.regionGraph().nodeSeq(rightFlankNode).length();
     for (const auto& diplotypeNodes : nodesByDiplotype)
     {
-        DiplotypePaths genotypePaths;
+        Diplotype genotypePaths;
         for (const auto& haplotypeNodes : diplotypeNodes)
         {
             genotypePaths.emplace_back(&locusSpec.regionGraph(), 0, haplotypeNodes, rightFlankLength);

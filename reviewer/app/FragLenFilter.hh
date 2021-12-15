@@ -28,4 +28,4 @@
 int getMeanFragLen(const FragById& fragById);
 
 FragPathAlignsById
-resolveByFragLen(int meanFragLen, const DiplotypePaths& paths, const PairPathAlignById& pairPathAlignById);
+resolveByFragLen(int meanFragLen, const Diplotype& paths, const PairPathAlignById& pairPathAlignById);

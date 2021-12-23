@@ -22,7 +22,6 @@
 
 #include <algorithm>
 #include <map>
-#include <sstream>
 #include <vector>
 
 using graphtools::NodeId;
@@ -127,24 +126,6 @@ static map<string, vector<double>> getGenotypeDepths(
     return genotypeDepths;
 }
 
-template <typename T> static string encode(const vector<T>& depths)
-{
-    std::ostringstream encoding;
-    encoding.precision(2);
-    encoding << std::fixed;
-
-    for (auto depth : depths)
-    {
-        if (encoding.tellp())
-        {
-            encoding << "/";
-        }
-        encoding << depth;
-    }
-
-    return encoding.str();
-}
-
 MetricsByVariant getMetrics(
     const LocusSpecification& locusSpec, const GraphPaths& paths, const FragById& fragById,
     const FragAssignment& fragAssignment, const FragPathAlignsById& fragPathAlignsById)
@@ -155,13 +136,10 @@ MetricsByVariant getMetrics(
 
     for (const auto& variantSpec : locusSpec.variantSpecs())
     {
-        const auto genotypeEncoding = encode(genotypes.at(variantSpec.id()));
-        const auto depthsEncoding = encode(genotypeDepths.at(variantSpec.id()));
-
         Metrics metrics;
         metrics.variantId = variantSpec.id();
-        metrics.genotype = genotypeEncoding;
-        metrics.alleleDepth = depthsEncoding;
+        metrics.genotype = genotypes.at(variantSpec.id());
+        metrics.alleleDepth = genotypeDepths.at(variantSpec.id());
 
         metricsByVariant.push_back(metrics);
     }

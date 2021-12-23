@@ -20,7 +20,10 @@
 
 #pragma once
 
+#include <fstream>
 #include <string>
+
+#include "app/CatalogLoading.hh"
 
 struct WorkflowArguments
 {

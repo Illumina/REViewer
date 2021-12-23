@@ -28,6 +28,7 @@
 #include "core/LocusSpecification.hh"
 
 using Diplotype = std::vector<graphtools::Path>;
+std::ostream& operator<<(std::ostream& out, const Diplotype& diplotype);
 
 /// Computes all possible diplotype paths at the given locus
 /// \param meanFragLen: Mean fragment length
@@ -41,4 +42,4 @@ using Diplotype = std::vector<graphtools::Path>;
 /// (last node)
 ///
 std::vector<Diplotype>
-getCandidateDiplotypePaths(int meanFragLen, const std::string& vcfPath, const LocusSpecification& locusSpec);
+getCandidateDiplotypes(int meanFragLen, const std::string& vcfPath, const LocusSpecification& locusSpec);

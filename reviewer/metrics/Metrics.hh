@@ -20,7 +20,9 @@
 
 #pragma once
 
+#include <ostream>
 #include <string>
+#include <vector>
 
 #include "core/Aligns.hh"
 #include "core/LocusSpecification.hh"
@@ -28,8 +30,8 @@
 struct Metrics
 {
     std::string variantId = "NA";
-    std::string genotype = "NA";
-    std::string alleleDepth = "NA";
+    std::vector<int> genotype;
+    std::vector<double> alleleDepth;
 };
 
 using MetricsByVariant = std::vector<Metrics>;

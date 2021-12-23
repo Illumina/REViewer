@@ -20,6 +20,7 @@
 
 #include "app/GenotypePaths.hh"
 
+#include <algorithm>
 #include <cassert>
 #include <fstream>
 #include <map>
@@ -202,8 +203,7 @@ static vector<NodeVectors> extendDiplotype(const vector<NodeVectors>& genotypes,
     return extendedGenotype;
 }
 
-vector<Diplotype>
-getCandidateDiplotypePaths(int meanFragLen, const string& vcfPath, const LocusSpecification& locusSpec)
+vector<Diplotype> getCandidateDiplotypes(int meanFragLen, const string& vcfPath, const LocusSpecification& locusSpec)
 {
     auto genotypeNodesByNodeRange = getGenotypeNodesByNodeRange(meanFragLen, vcfPath, locusSpec);
 
@@ -235,18 +235,78 @@ getCandidateDiplotypePaths(int meanFragLen, const string& vcfPath, const LocusSp
         ++node;
     }
 
-    vector<Diplotype> pathsByDiplotype;
+    vector<Diplotype> diplotypes;
     const NodeId rightFlankNode = locusSpec.regionGraph().numNodes() - 1;
     const int rightFlankLength = locusSpec.regionGraph().nodeSeq(rightFlankNode).length();
     for (const auto& diplotypeNodes : nodesByDiplotype)
     {
-        Diplotype genotypePaths;
+        Diplotype diplotype;
         for (const auto& haplotypeNodes : diplotypeNodes)
         {
-            genotypePaths.emplace_back(&locusSpec.regionGraph(), 0, haplotypeNodes, rightFlankLength);
+            diplotype.emplace_back(&locusSpec.regionGraph(), 0, haplotypeNodes, rightFlankLength);
         }
-        pathsByDiplotype.push_back(genotypePaths);
+
+        if (diplotype.front() < diplotype.back())
+        {
+            std::iter_swap(diplotype.begin(), diplotype.end() - 1);
+        }
+
+        diplotypes.push_back(diplotype);
     }
 
-    return pathsByDiplotype;
+    std::sort(diplotypes.begin(), diplotypes.end());
+    diplotypes.erase(std::unique(diplotypes.begin(), diplotypes.end()), diplotypes.end());
+
+    return diplotypes;
+}
+
+static string summarizePath(const graphtools::Path& path)
+{
+    const auto& graph = *path.graphRawPtr();
+    string summary;
+    std::set<graphtools::NodeId> observedNodes;
+    for (const auto nodeId : path.nodeIds())
+    {
+        if (observedNodes.find(nodeId) != observedNodes.end())
+        {
+            continue;
+        }
+
+        const bool isLoopNode = graph.hasEdge(nodeId, nodeId);
+
+        if (nodeId == 0)
+        {
+            summary += "(LF)";
+        }
+        else if (nodeId + 1 == graph.numNodes())
+        {
+            summary += "(RF)";
+        }
+        else
+        {
+            assert(graph.numNodes() != 0);
+            const string& nodeSeq = graph.nodeSeq(nodeId);
+            summary += "(" + nodeSeq + ")";
+
+            if (isLoopNode)
+            {
+                int numMotifs = std::count(path.nodeIds().begin(), path.nodeIds().end(), nodeId);
+                summary += "{" + std::to_string(numMotifs) + "}";
+            }
+        }
+
+        observedNodes.emplace(nodeId);
+    }
+
+    return summary;
+}
+
+std::ostream& operator<<(std::ostream& out, const Diplotype& diplotype)
+{
+    out << summarizePath(diplotype.front());
+    if (diplotype.size() == 2)
+    {
+        out << "/" << summarizePath(diplotype.back());
+    }
+    return out;
 }

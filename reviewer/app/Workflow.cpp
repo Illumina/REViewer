@@ -105,7 +105,6 @@ static LocusResults analyzeLocus(
     auto pathsByDiplotype = getCandidateDiplotypes(meanFragLen, vcfPath, locusSpec);
 
     spdlog::info("Phasing");
-
     auto scoredDiplotypes = scoreDiplotypes(fragById, pathsByDiplotype);
     auto topDiplotype = scoredDiplotypes.front().first; // scoredDiplotypes are sorted
     spdlog::info("Found {} paths defining diplotype", topDiplotype.size());
@@ -156,21 +155,21 @@ std::ofstream initPhasingFile(const std::string& prefix, bool generateOutput)
 {
     if (!generateOutput)
     {
-        std::ofstream phasingInfoFile;
-        phasingInfoFile.setstate(std::ios::failbit);
-        return phasingInfoFile;
+        std::ofstream file;
+        file.setstate(std::ios::failbit);
+        return file;
     }
 
     const auto path = prefix + ".phasing.tsv";
-    std::ofstream phasingInfoFile(path);
-    if (!phasingInfoFile.is_open())
+    std::ofstream file(path);
+    if (!file.is_open())
     {
         throw std::runtime_error("Unable to open " + path);
     }
 
-    phasingInfoFile << "LocusId\tDiplotype\tScore" << std::endl;
+    file << "LocusId\tDiplotype\tScore" << std::endl;
 
-    return phasingInfoFile;
+    return file;
 }
 
 std::ofstream initMetricsFile(const std::string& prefix)

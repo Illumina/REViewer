@@ -246,6 +246,8 @@ vector<Diplotype> getCandidateDiplotypes(int meanFragLen, const string& vcfPath,
             diplotype.emplace_back(&locusSpec.regionGraph(), 0, haplotypeNodes, rightFlankLength);
         }
 
+        // The code so far considers diplotypes that differ by the order of constituent haplotypes to be distinct.
+        // To overcome this issue, we enforce a consistent haplotype order.
         if (diplotype.front() < diplotype.back())
         {
             std::iter_swap(diplotype.begin(), diplotype.end() - 1);

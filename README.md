@@ -62,9 +62,9 @@ repeats is by going over [examples of read pileups](docs/examples.md).
 REViewer developed by [Ben Weisburd](https://github.com/bw2). It provides a
 convenient way to inspect large quantities of read pileups.
 
-- [Review BAMs script](https://gitlab.com/andreassh/review-bams) that allows running
-REViewer on regular BAM file (by running ExpansionHunter behind the scenes). It is
-developed by [Andreas Halman](https://gitlab.com/andreassh).
+- [Review BAMs](https://gitlab.com/andreassh/review-bams) is script that allows
+running REViewer on regular BAM file (by running ExpansionHunter behind the
+scenes). It was developed by [Andreas Halman](https://gitlab.com/andreassh).
 
 ## Citation
 

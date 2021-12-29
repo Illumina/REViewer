@@ -20,7 +20,10 @@
 
 #pragma once
 
+#include <fstream>
 #include <string>
+
+#include "app/CatalogLoading.hh"
 
 struct WorkflowArguments
 {
@@ -31,7 +34,6 @@ struct WorkflowArguments
     std::string locusId;
     std::string outputPrefix;
     int locusExtensionLength;
-    bool outputPhasingInfo;
 };
 
 int runWorkflow(const WorkflowArguments& args);

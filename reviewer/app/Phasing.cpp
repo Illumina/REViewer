@@ -83,3 +83,5 @@ ScoredDiplotypes scoreDiplotypes(const FragById& fragById, const vector<Diplotyp
     assert(!scoredDiplotypes.empty());
     return scoredDiplotypes;
 }
+
+std::ostream& operator<<(std::ostream& out, const ScoredDiplotype& diplotype) { return out; }

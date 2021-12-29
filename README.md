@@ -63,8 +63,8 @@ REViewer developed by [Ben Weisburd](https://github.com/bw2). It provides a
 convenient way to inspect large quantities of read pileups.
 
 - [Review BAMs](https://gitlab.com/andreassh/review-bams) is script that allows
-running REViewer on regular BAM file (by running ExpansionHunter behind the
-scenes). It was developed by [Andreas Halman](https://gitlab.com/andreassh).
+applying REViewer to a regular BAM file (by running ExpansionHunter in the
+background). It was developed by [Andreas Halman](https://gitlab.com/andreassh).
 
 ## Citation
 

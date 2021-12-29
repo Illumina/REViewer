@@ -151,15 +151,8 @@ vector<string> getLocusIds(const RegionCatalog& catalog, const string& encoding)
     return locusIds;
 }
 
-std::ofstream initPhasingFile(const std::string& prefix, bool generateOutput)
+std::ofstream initPhasingFile(const std::string& prefix)
 {
-    if (!generateOutput)
-    {
-        std::ofstream file;
-        file.setstate(std::ios::failbit);
-        return file;
-    }
-
     const auto path = prefix + ".phasing.tsv";
     std::ofstream file(path);
     if (!file.is_open())
@@ -191,7 +184,7 @@ int runWorkflow(const WorkflowArguments& args)
     Reference reference(args.referencePath);
     auto locusCatalog = loadLocusCatalogFromDisk(args.catalogPath, reference, args.locusExtensionLength);
     auto locusIds = getLocusIds(locusCatalog, args.locusId);
-    auto phasingFile = initPhasingFile(args.outputPrefix, args.outputPhasingInfo);
+    auto phasingFile = initPhasingFile(args.outputPrefix);
     auto metricsFile = initMetricsFile(args.outputPrefix);
 
     for (const auto& locusId : locusIds)

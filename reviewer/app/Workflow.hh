@@ -34,7 +34,6 @@ struct WorkflowArguments
     std::string locusId;
     std::string outputPrefix;
     int locusExtensionLength;
-    bool outputPhasingInfo;
 };
 
 int runWorkflow(const WorkflowArguments& args);

@@ -22,6 +22,7 @@
 #include "graphutils/PairHashing.hh"
 
 #include <cassert>
+#include <limits>
 
 namespace graphtools
 {

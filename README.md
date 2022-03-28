@@ -52,7 +52,10 @@ sorted and indexed.
 
 - [A blog post describing the method](https://www.illumina.com/science/genomics-research/reviewer-visualizing-alignments-short-reads-long-repeat.html)
 - [Examples of read pileups](docs/examples.md) corresponding to correctly and
-incorrectly genotyped repeats
+incorrectly genotyped repeats.
+- You can use the files under `/reviewer/tests/inputs/` to test REViewer on your own machine. 
+(Don't use the outputs from the ExpansionHunter repository example; it contains variant locus 
+features that REViewer does not support, and will crash REViewer.)
 
 ## Reference documentation
 

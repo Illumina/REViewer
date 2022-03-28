@@ -116,6 +116,10 @@ getGenotypeNodesByNodeRange(int meanFragLen, const string& vcfPath, const LocusS
     map<NodeRange, NodeVectors> genotypeNodesByNodeRange;
     for (const auto& variantSpec : locusSpec.variantSpecs())
     {
+        if (variantSpec.classification().type == VariantType::kSmallVariant)
+        {
+            throw std::logic_error("REViewer does not accept locus definitions containing small variants (e.g. '(A|T)').");
+        }
         assert(variantSpec.classification().type == VariantType::kRepeat);
         assert(variantSpec.nodes().size() == 1);
         NodeId repeatNode = variantSpec.nodes().front();

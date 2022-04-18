@@ -20,6 +20,7 @@ find_package(LibLZMA REQUIRED)
 find_package(CURL REQUIRED)
 find_package(Catch2 REQUIRED)
 find_package(Threads REQUIRED)
+#find_package(fmt) # If you get linker errors about fmt stuff during compilation, comment this in.
 find_library(htslib libhts.a)
 find_library(htslib hts)
 
@@ -87,6 +88,7 @@ target_link_libraries(REViewer PUBLIC
         ${CURL_LIBRARIES}
         ZLIB::ZLIB
         BZip2::BZip2
+#        fmt::fmt   # If you get linker errors about fmt stuff during compilation, comment this back in.
         Threads::Threads)
 
 

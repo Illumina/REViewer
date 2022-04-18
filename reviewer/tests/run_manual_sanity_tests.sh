@@ -19,7 +19,7 @@ for bamlet_file in inputs/bamlets/*.bam; do
   fi
 
   echo "Running REViewer on ${bamlet_file}"
-  reviewer \
+  REViewer \
     --reads $bamlet_file \
     --vcf inputs/vcfs/${sample}.vcf \
     --reference inputs/genomes/HG38_chr16.fa \

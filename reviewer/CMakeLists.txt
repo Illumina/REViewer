@@ -20,7 +20,7 @@ find_package(LibLZMA REQUIRED)
 find_package(CURL REQUIRED)
 find_package(Catch2 REQUIRED)
 find_package(Threads REQUIRED)
-# find_package(fmt) # If you get linker errors about fmt stuff during compilation, comment this in.
+#find_package(fmt) # If you get linker errors about fmt stuff during compilation, comment this in.
 find_library(htslib libhts.a)
 find_library(htslib hts)
 

@@ -21,6 +21,7 @@
 #include "Workflow.hh"
 
 #include <set>
+#include <stdlib.h>
 
 #include <boost/algorithm/string.hpp>
 
@@ -186,6 +187,9 @@ int runWorkflow(const WorkflowArguments& args)
     auto locusIds = getLocusIds(locusCatalog, args.locusId);
     auto phasingFile = initPhasingFile(args.outputPrefix);
     auto metricsFile = initMetricsFile(args.outputPrefix);
+    
+    // For reproducibility
+    srand(14345);
 
     for (const auto& locusId : locusIds)
     {

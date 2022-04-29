@@ -22,11 +22,10 @@
 
 #include "graphcore/Path.hh"
 
-#include <boost/optional.hpp>
-
 #include <fstream>
 #include <list>
 #include <stdexcept>
+
 
 using boost::optional;
 using graphtools::NodeId;

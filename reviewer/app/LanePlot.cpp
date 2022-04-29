@@ -20,6 +20,7 @@
 
 #include "app/LanePlot.hh"
 
+#include <stdexcept>
 #include <tuple>
 
 #include <boost/optional.hpp>
@@ -201,9 +202,23 @@ getFeature(const ColorPicker& colorPicker, NodeId node, const Operation& op, con
     optional<Feature> feature;
     const string fill = colorPicker.getReadColor(node);
     const int opLength = op.length();
+    const string atcg = "ATCG";
     if (op.type() == OperationType::kMatch)
     {
+        string label(query.size(), 'N');
         feature = Feature(FeatureType::kRect, opLength, fill, "none");
+        for (string::size_type i = 0; i < query.size(); i++)
+        {
+            if (atcg.find(ref[i]) == string::npos)
+            {
+                label[i] = query[i];
+            }
+            else
+            {
+                label[i] = ' ';
+            }
+        }
+        feature->label = label;
     }
     else if (op.type() == OperationType::kMismatch)
     {
@@ -479,6 +494,10 @@ vector<LanePlot> generateBlueprint(
     auto infoByRead = extractReadInfo(fragAssignment, fragById, fragPathAlignsById);
     removeFlankingReads(infoByRead);
     clipFlanks(paths, 50, infoByRead);
+    if (infoByRead.empty())
+    {
+        throw std::runtime_error("There are no read alignments in the target region");
+    }
     vector<LanePlot> lanePlots;
     for (int pathIndex = 0; pathIndex != paths.size(); ++pathIndex)
     {

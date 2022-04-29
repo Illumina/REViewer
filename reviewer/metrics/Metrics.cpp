@@ -18,12 +18,10 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-#include "metrics/Workflow.hh"
+#include "metrics/Metrics.hh"
 
 #include <algorithm>
-#include <fstream>
 #include <map>
-#include <sstream>
 #include <vector>
 
 using graphtools::NodeId;
@@ -31,6 +29,28 @@ using std::map;
 using std::ofstream;
 using std::string;
 using std::vector;
+
+using Genotype = vector<int>;
+
+static map<string, Genotype> getGenotypes(const LocusSpecification& locusSpec, const GraphPaths& hapPaths)
+{
+    map<string, Genotype> genotypes;
+    for (const auto& variantSpec : locusSpec.variantSpecs())
+    {
+        assert(variantSpec.nodes().size() == 1);
+        const auto strNode = variantSpec.nodes().front();
+
+        Genotype genotype;
+        for (const auto& hapPath : hapPaths)
+        {
+            const int strLen = std::count(hapPath.nodeIds().begin(), hapPath.nodeIds().end(), strNode);
+            genotype.push_back(strLen);
+        }
+        genotypes[variantSpec.id()] = genotype;
+    }
+
+    return genotypes;
+}
 
 static int getTotalMatchesToNode(NodeId targetNode, const vector<GraphAlignPtr>& hapAligns)
 {
@@ -106,44 +126,23 @@ static map<string, vector<double>> getGenotypeDepths(
     return genotypeDepths;
 }
 
-static string encodeDepths(const vector<double>& depths)
-{
-    std::ostringstream encoding;
-    encoding.precision(2);
-    encoding << std::fixed;
-
-    for (auto depth : depths)
-    {
-        if (encoding.tellp())
-        {
-            encoding << "/";
-        }
-        encoding << depth;
-    }
-
-    return encoding.str();
-}
-
-void getMetrics(
+MetricsByVariant getMetrics(
     const LocusSpecification& locusSpec, const GraphPaths& paths, const FragById& fragById,
-    const FragAssignment& fragAssignment, const FragPathAlignsById& fragPathAlignsById, const string& outputPrefix)
+    const FragAssignment& fragAssignment, const FragPathAlignsById& fragPathAlignsById)
 {
+    MetricsByVariant metricsByVariant;
+    const auto genotypes = getGenotypes(locusSpec, paths);
     const auto genotypeDepths = getGenotypeDepths(locusSpec, paths, fragById, fragAssignment, fragPathAlignsById);
 
-    const string alleleDepthsPath = outputPrefix + ".allele_depth.tsv";
-    ofstream alleleDepthsFile(alleleDepthsPath);
-    if (alleleDepthsFile.is_open())
+    for (const auto& variantSpec : locusSpec.variantSpecs())
     {
-        alleleDepthsFile << "VariantId\tAlleleDepths" << std::endl;
-        for (const auto& variantSpec : locusSpec.variantSpecs())
-        {
-            const auto depthsEncoding = encodeDepths(genotypeDepths.at(variantSpec.id()));
-            alleleDepthsFile << variantSpec.id() << "\t" << depthsEncoding << std::endl;
-        }
+        Metrics metrics;
+        metrics.variantId = variantSpec.id();
+        metrics.genotype = genotypes.at(variantSpec.id());
+        metrics.alleleDepth = genotypeDepths.at(variantSpec.id());
+
+        metricsByVariant.push_back(metrics);
     }
-    else
-    {
-        throw std::runtime_error("Unable to open " + alleleDepthsPath);
-    }
-    alleleDepthsFile.close();
+
+    return metricsByVariant;
 }

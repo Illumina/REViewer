@@ -21,11 +21,20 @@
 #pragma once
 
 #include <string>
+#include <vector>
 
 #include "core/Aligns.hh"
 #include "core/LocusSpecification.hh"
 
-void getMetrics(
+struct Metrics
+{
+    std::string variantId = "NA";
+    std::vector<int> genotype;
+    std::vector<double> alleleDepth;
+};
+
+using MetricsByVariant = std::vector<Metrics>;
+
+MetricsByVariant getMetrics(
     const LocusSpecification& locusSpec, const GraphPaths& paths, const FragById& fragById,
-    const FragAssignment& fragAssignment, const FragPathAlignsById& fragPathAlignsById,
-    const std::string& outputPrefix);
+    const FragAssignment& fragAssignment, const FragPathAlignsById& fragPathAlignsById);

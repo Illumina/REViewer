@@ -213,8 +213,12 @@ RegionCatalog loadLocusCatalogFromDisk(const string& catalogPath, const Referenc
     for (auto& locusJson : catalogJson)
     {
         LocusDescriptionFromUser userDescription = loadUserDescription(locusJson, reference.contigInfo());
-        LocusSpecification locusSpec = decodeLocusSpecification(userDescription, reference, flankLength);
-        catalog.emplace(std::make_pair(locusSpec.locusId(), locusSpec));
+        try {
+            LocusSpecification locusSpec = decodeLocusSpecification(userDescription, reference, flankLength);
+            catalog.emplace(std::make_pair(locusSpec.locusId(), locusSpec));
+        } catch (const std::exception& e) {
+            std::cout << "Error on locus spec " + userDescription.locusId + ": " + e.what() << std::endl;
+        }
     }
 
     return catalog;

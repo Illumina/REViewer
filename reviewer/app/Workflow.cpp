@@ -37,7 +37,7 @@
 #include "app/Origin.hh"
 #include "app/Phasing.hh"
 #include "app/Projection.hh"
-#include "metrics/Workflow.hh"
+#include "metrics/Metrics.hh"
 #include "snps/Workflow.hh"
 using boost::optional;
 using graphtools::Graph;
@@ -126,7 +126,7 @@ static LocusResults analyzeLocus(
     auto metricsByVariant = getMetrics(locusSpec, topDiplotype, fragById, fragAssignment, fragPathAlignsById);
 
     spdlog::info("Calling SNPs");
-    snps::callSnps(diplotypePaths, fragById, fragAssignment, fragPathAlignsById);
+    snps::callSnps(topDiplotype, fragById, fragAssignment, fragPathAlignsById);
 
     spdlog::info("Generating plot blueprint");
     auto lanePlots = generateBlueprint(topDiplotype, fragById, fragAssignment, fragPathAlignsById);
@@ -190,7 +190,7 @@ int runWorkflow(const WorkflowArguments& args)
     auto locusIds = getLocusIds(locusCatalog, args.locusId);
     auto phasingFile = initPhasingFile(args.outputPrefix);
     auto metricsFile = initMetricsFile(args.outputPrefix);
-    
+
     // For reproducibility
     srand(14345);
 

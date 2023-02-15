@@ -24,6 +24,8 @@
 
 #include "core/Aligns.hh"
 
+using std::string;
+
 namespace snps
 {
 
@@ -37,4 +39,7 @@ void callSnps(
     const GraphPaths& paths, const FragById& fragById, const FragAssignment& fragAssignment,
     const FragPathAlignsById& fragPathAlignsById);
 
+    string pileupConsensus(const GraphPaths& paths, const FragById& fragById, const FragAssignment& fragAssignment,
+                            const FragPathAlignsById& fragPathAlignsById);
 }
+

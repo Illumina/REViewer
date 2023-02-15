@@ -126,19 +126,7 @@ vector<int> getStartIndexes(const Path& projPath, int initialStartIndex, const G
     return startIndexes;
 }
 
-struct AlignProj
-{
-    AlignProj(vector<int> startIndexes, GraphAlignPtr align)
-        : startIndexes(std::move(startIndexes))
-        , align(std::move(align))
-    {
-    }
-
-    vector<int> startIndexes;
-    GraphAlignPtr align;
-};
-
-static optional<AlignProj> project(const GraphAlign& align, const Path& projPath)
+static boost::optional<AlignProj> project(const GraphAlign& align, const graphtools::Path& projPath)
 {
     // Find the first common node
     int alignNodeIndex = 0;

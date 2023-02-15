@@ -24,16 +24,21 @@
 #include <string>
 
 #include "app/CatalogLoading.hh"
+using std::string;
+using std::vector;
 
 struct WorkflowArguments
 {
-    std::string readsPath;
-    std::string vcfPath;
-    std::string catalogPath;
-    std::string referencePath;
-    std::string locusId;
-    std::string outputPrefix;
+    string readsPath;
+    string vcfPath;
+    string catalogPath;
+    string referencePath;
+    string locusId;
+    string outputPrefix;
     int locusExtensionLength;
 };
 
 int runWorkflow(const WorkflowArguments& args);
+std::ofstream initPhasingFile(const string& prefix);
+std::ofstream initMetricsFile(const string& prefix);
+vector<string> getLocusIds(const RegionCatalog& catalog, const string& encoding);

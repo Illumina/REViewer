@@ -132,36 +132,44 @@ vector<BaseCounts> getBaseCountVector(const GraphPath& path, const vector<Aligne
     return baseCountVec;
 }
 
+vector<AlignedRead> getMatchingHaplotypeReads(
+        int hapIndex, const FragById& fragById, const FragAssignment& fragAssignment,
+        const FragPathAlignsById& fragPathAlignsById)
+{
+    vector<AlignedRead> haplotypeReads;
+    for (int fragIndex = 0; fragIndex != fragAssignment.fragIds.size(); ++fragIndex)
+    {
+        const auto& fragId = fragAssignment.fragIds[fragIndex];
+        const int alignIndex = fragAssignment.alignIndexByFrag[fragIndex];
+        const auto& fragPathAlign = fragPathAlignsById.at(fragId)[alignIndex];
+        assert(fragPathAlign.readAlign.align && fragPathAlign.mateAlign.align);
+
+        if (fragPathAlign.readAlign.pathIndex == hapIndex)
+        {
+            const auto& readBases = fragById.at(fragId).read.bases;
+            const auto& mateBases = fragById.at(fragId).mate.bases;
+            haplotypeReads.emplace_back(std::make_pair(readBases, fragPathAlign.readAlign));
+            haplotypeReads.emplace_back(std::make_pair(mateBases, fragPathAlign.mateAlign));
+        }
+    }
+    return haplotypeReads;
+}
+
 void callSnps(
     const GraphPaths& paths, const FragById& fragById, const FragAssignment& fragAssignment,
     const FragPathAlignsById& fragPathAlignsById)
 {
     for (int hapIndex = 0; hapIndex != paths.size(); ++hapIndex)
     {
-        vector<AlignedRead> haplotypeReads;
-        for (int fragIndex = 0; fragIndex != fragAssignment.fragIds.size(); ++fragIndex)
-        {
-            const auto& fragId = fragAssignment.fragIds[fragIndex];
-            const int alignIndex = fragAssignment.alignIndexByFrag[fragIndex];
-            const auto& fragPathAlign = fragPathAlignsById.at(fragId)[alignIndex];
-            assert(fragPathAlign.readAlign.align && fragPathAlign.mateAlign.align);
-
-            if (fragPathAlign.readAlign.pathIndex == hapIndex)
-            {
-                const auto& readBases = fragById.at(fragId).read.bases;
-                const auto& mateBases = fragById.at(fragId).mate.bases;
-                haplotypeReads.emplace_back(std::make_pair(readBases, fragPathAlign.readAlign));
-                haplotypeReads.emplace_back(std::make_pair(mateBases, fragPathAlign.mateAlign));
-            }
-        }
+        auto haplotypeReads = getMatchingHaplotypeReads(hapIndex, fragById, fragAssignment,
+                                                                       fragPathAlignsById);
 
         std::cerr << "Hap\tRef\tA\tT\tC\tG" << std::endl;
         auto baseCountVec = getBaseCountVector(paths[hapIndex], haplotypeReads);
         const auto& haplotypeSeq = paths[hapIndex].seq();
 
-        for (int index = 0; index != baseCountVec.size(); ++index)
-        {
-            const auto& baseCounts = baseCountVec[index];
+        for (int index = 0; index != baseCountVec.size(); ++index) {
+            const auto &baseCounts = baseCountVec[index];
             char ref = haplotypeSeq[index];
             auto as = baseCounts.getCount('A');
             auto ts = baseCounts.getCount('T');
@@ -170,6 +178,12 @@ void callSnps(
             std::cerr << hapIndex << "\t" << ref << "\t" << as << "\t" << ts << "\t" << cs << "\t" << gs << std::endl;
         }
     }
+}
+
+string pileupConsensus(const GraphPaths& paths, const FragById& fragById, const FragAssignment& fragAssignment,
+                       const FragPathAlignsById& fragPathAlignsById)
+{
+        return "Not Implemented!";
 }
 
 }

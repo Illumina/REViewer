@@ -48,3 +48,17 @@ int score(const graphtools::GraphAlignment& alignment, int matchScore = 5, int m
 
 using PairPathAlignById = std::map<std::string, PairPathAlign>;
 PairPathAlignById project(const std::vector<graphtools::Path>& genotypePaths, const FragById& fragById);
+
+struct AlignProj
+{
+    AlignProj(std::vector<int> startIndexes, GraphAlignPtr align)
+            : startIndexes(std::move(startIndexes))
+            , align(std::move(align))
+    {
+    }
+
+    std::vector<int> startIndexes;
+    GraphAlignPtr align;
+};
+
+static boost::optional<AlignProj> project(const GraphAlign& align, const graphtools::Path& projPath);

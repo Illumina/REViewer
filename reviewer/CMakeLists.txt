@@ -20,7 +20,7 @@ find_package(LibLZMA REQUIRED)
 find_package(CURL REQUIRED)
 find_package(Catch2 REQUIRED)
 find_package(Threads REQUIRED)
-#find_package(fmt) # If you get linker errors about fmt stuff during compilation, comment this in.
+find_package(fmt) # If you get linker errors about fmt stuff during compilation, comment this in.
 find_library(htslib libhts.a)
 find_library(htslib hts)
 
@@ -89,15 +89,44 @@ target_link_libraries(REViewer PUBLIC
         ${CURL_LIBRARIES}
         ZLIB::ZLIB
         BZip2::BZip2
-#        fmt::fmt   # If you get linker errors about fmt stuff during compilation, comment this back in.
+        fmt::fmt   # If you get linker errors about fmt stuff during compilation, comment this back in.
         Threads::Threads)
 
-
-install(TARGETS REViewer RUNTIME DESTINATION bin)
-
 add_executable(UnitTests
+        app/Workflow.cpp app/Workflow.hh
+        app/CatalogLoading.hh app/CatalogLoading.cpp
+        app/LocusSpecDecoding.hh app/LocusSpecDecoding.cpp
+        app/RegionGraph.hh app/RegionGraph.cpp
+        app/GraphBlueprint.hh app/GraphBlueprint.cpp
+        app/GenotypePaths.hh app/GenotypePaths.cpp
+        app/Aligns.hh app/Aligns.cpp
+        app/Projection.hh app/Projection.cpp
+        app/LanePlot.hh app/LanePlot.cpp
+        app/GenerateSvg.hh app/GenerateSvg.cpp
+        app/Origin.hh app/Origin.cpp
+        app/Phasing.hh app/Phasing.cpp
+        app/FragLenFilter.hh app/FragLenFilter.cpp
         tests/UnitTests.cpp
         snps/WorkflowTest.cpp)
+
 target_include_directories(UnitTests PUBLIC ${CMAKE_SOURCE_DIR})
 
-target_link_libraries(UnitTests SnpCalling Catch2::Catch2)
+target_link_libraries(UnitTests Core Metrics SnpCalling Catch2::Catch2
+        ${STATIC_FLAGS}
+        ${htslib}
+        ${LIBLZMA_LIBRARIES}
+        ${CURL_LIBRARIES}
+        ZLIB::ZLIB
+        BZip2::BZip2
+        fmt::fmt   # If you get linker errors about fmt stuff during compilation, comment this back in.
+        Threads::Threads)
+
+add_custom_command(TARGET UnitTests
+        COMMAND ln -sf ${CMAKE_CURRENT_BINARY_DIR}/tests ${CMAKE_SOURCE_DIR}/tests)
+
+execute_process(COMMAND cmake -E create_symlink
+        ${CMAKE_SOURCE_DIR}/tests
+        ${CMAKE_INSTALL_PREFIX}/tests)
+
+install(TARGETS REViewer UnitTests RUNTIME DESTINATION bin)
+

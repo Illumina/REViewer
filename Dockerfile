@@ -26,4 +26,4 @@ RUN wget https://github.com/Illumina/REViewer/archive/refs/tags/v0.2.7.zip; \
     cmake ..; \
     make; \
     ln -s /usr/bin/REViewer-0.2.7/build/install/bin/REViewer /usr/bin/REViewer
-CMD ["bash"]
+CMD ["REViewer"]
